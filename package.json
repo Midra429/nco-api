@@ -32,30 +32,33 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
+    "./*": {
+      "types": "./dist/*/index.d.ts",
+      "import": "./dist/*/index.js",
+      "default": "./dist/*/index.js"
+    },
     "./constants": {
       "types": "./dist/constants.d.ts",
       "import": "./dist/constants.js",
       "default": "./dist/constants.js"
     },
-    "./utils/*": {
-      "types": "./dist/utils/*.d.ts",
-      "import": "./dist/utils/*.js",
-      "default": "./dist/utils/*.js"
-    },
-    "./*": {
-      "types": "./dist/*/index.d.ts",
-      "import": "./dist/*/index.js",
-      "default": "./dist/*/index.js"
+    "./niconico/*": {
+      "types": "./dist/niconico/*.d.ts",
+      "import": "./dist/niconico/*.js",
+      "default": "./dist/niconico/*.js"
     },
     "./search/*": {
       "types": "./dist/search/*.d.ts",
       "import": "./dist/search/*.js",
       "default": "./dist/search/*.js"
     },
-    "./niconico/*": {
-      "types": "./dist/niconico/*.d.ts",
-      "import": "./dist/niconico/*.js",
-      "default": "./dist/niconico/*.js"
+    "./types/*": {
+      "types": "./dist/types/*.d.ts"
+    },
+    "./utils/*": {
+      "types": "./dist/utils/*.d.ts",
+      "import": "./dist/utils/*.js",
+      "default": "./dist/utils/*.js"
     }
   },
   "dependencies": {
