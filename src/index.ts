@@ -1,2 +1,7 @@
-export * from './search'
-export * as niconico from './niconico'
+import { search } from './search'
+import * as niconico from './niconico'
+
+export const ncoApi = {
+  search,
+  niconico,
+}

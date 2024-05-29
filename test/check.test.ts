@@ -1,7 +1,7 @@
 import { describe, test, expect } from '@jest/globals'
 
-import { compare } from '@midra/nco-parser'
-import * as ncoApi from '../src'
+import { ncoParser } from '@midra/nco-parser'
+import { ncoApi } from '../src'
 import { applyNgSetting } from '../src/utils/applyNgSetting'
 
 describe('check', () => {
@@ -17,7 +17,7 @@ describe('check', () => {
       ],
     ]
 
-    expect(TITLES.every(([a, b]) => compare(a, b))).toBe(true)
+    expect(TITLES.every(([a, b]) => ncoParser.compare(a, b))).toBe(true)
   })
 
   test('search', async () => {

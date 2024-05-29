@@ -3,7 +3,7 @@ import type {
   SearchQueryJsonFilter,
 } from '../../types/niconico/search'
 
-import { extract } from '@midra/nco-parser'
+import { ncoParser } from '@midra/nco-parser'
 import { symbol as removeSymbol } from '@midra/nco-parser/normalize/lib/remove/symbol'
 
 export type BuildSearchQueryOptions = {
@@ -143,7 +143,7 @@ export const buildSearchQuery = (
 > => {
   options.duration &&= Math.round(options.duration)
 
-  const extracted = extract(title)
+  const extracted = ncoParser.extract(title)
   const { season, episode } = extracted
   let { normalized, workTitle, subTitle } = extracted
 

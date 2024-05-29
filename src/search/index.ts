@@ -1,8 +1,8 @@
 import type { SearchData } from '../types/niconico/search'
 
 import { DANIME_CHANNEL_ID } from '../constants'
-import { compare } from '@midra/nco-parser'
-import { search as niconicoSearchApi } from '../niconico'
+import { ncoParser } from '@midra/nco-parser'
+import { search as niconicoSearch } from '../niconico'
 import { buildSearchQuery } from './lib/buildSearchQuery'
 
 const validateChapters = (
@@ -20,7 +20,7 @@ const validateChapters = (
 export const search = async (...args: Parameters<typeof buildSearchQuery>) => {
   const [title, options] = args
 
-  const response = await niconicoSearchApi({
+  const response = await niconicoSearch({
     ...buildSearchQuery(...args),
     fields: [
       'contentId',
@@ -53,7 +53,7 @@ export const search = async (...args: Parameters<typeof buildSearchQuery>) => {
           if (
             !options?.guest &&
             options?.chapter &&
-            compare(title, matchSplit.groups!.title)
+            ncoParser.compare(title, matchSplit.groups!.title)
           ) {
             const chapterNum = Number(matchSplit.groups!.chapter)
 
@@ -70,7 +70,7 @@ export const search = async (...args: Parameters<typeof buildSearchQuery>) => {
             /(^|\s)プレミアム限定動画(\s|$)/i.test(val.tags) &&
             !/(^|\s)プレミアム限定動画（お試し）(\s|$)/i.test(val.tags))
         ) {
-          if (!options?.guest && compare(title, val.title)) {
+          if (!options?.guest && ncoParser.compare(title, val.title)) {
             contents.normal.push(val)
           }
 
@@ -78,7 +78,7 @@ export const search = async (...args: Parameters<typeof buildSearchQuery>) => {
         }
 
         // 通常
-        if (compare(title, val.title)) {
+        if (ncoParser.compare(title, val.title)) {
           contents.normal.push(val)
 
           continue
@@ -89,7 +89,7 @@ export const search = async (...args: Parameters<typeof buildSearchQuery>) => {
           val.tags &&
           /(^|\s)(コメント専用動画|SZBH方式)(\s|$)/i.test(val.tags)
         ) {
-          if (options?.szbh && compare(title, val.title)) {
+          if (options?.szbh && ncoParser.compare(title, val.title)) {
             contents.szbh.push(val)
           }
 
