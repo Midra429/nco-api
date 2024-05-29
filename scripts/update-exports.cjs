@@ -47,4 +47,4 @@ packageJson.exports = Object.fromEntries(
   Object.entries(packageJson.exports).sort(([a], [b]) => a.localeCompare(b))
 )
 
-fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
+fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n')
