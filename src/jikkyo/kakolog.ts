@@ -21,8 +21,20 @@ export const kakolog = async <Format extends JikkyoKakologFormat>(
   if (params.starttime < params.endtime) {
     const url = new URL(jikkyoId, API_BASE_URL)
 
-    url.searchParams.set('starttime', params.starttime.toString())
-    url.searchParams.set('endtime', params.endtime.toString())
+    url.searchParams.set(
+      'starttime',
+      (params.starttime instanceof Date
+        ? params.starttime.getTime() / 1000
+        : params.starttime
+      ).toString()
+    )
+    url.searchParams.set(
+      'endtime',
+      (params.endtime instanceof Date
+        ? params.endtime.getTime() / 1000
+        : params.endtime
+      ).toString()
+    )
     url.searchParams.set('format', params.format)
 
     try {

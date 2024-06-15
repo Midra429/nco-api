@@ -28,8 +28,8 @@ export type JikkyoKakologFormat = 'xml' | 'json'
  * パラメータ
  */
 export type JikkyoKakologParams<Format extends JikkyoKakologFormat> = {
-  starttime: number
-  endtime: number
+  starttime: number | Date
+  endtime: number | Date
   format: Format
 }
 
