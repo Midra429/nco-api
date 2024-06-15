@@ -42,6 +42,11 @@
       "import": "./dist/constants.js",
       "default": "./dist/constants.js"
     },
+    "./jikkyo/*": {
+      "types": "./dist/jikkyo/*.d.ts",
+      "import": "./dist/jikkyo/*.js",
+      "default": "./dist/jikkyo/*.js"
+    },
     "./niconico/*": {
       "types": "./dist/niconico/*.d.ts",
       "import": "./dist/niconico/*.js",
