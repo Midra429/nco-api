@@ -57,6 +57,11 @@
       "import": "./dist/search/*.js",
       "default": "./dist/search/*.js"
     },
+    "./syobocal/*": {
+      "types": "./dist/syobocal/*.d.ts",
+      "import": "./dist/syobocal/*.js",
+      "default": "./dist/syobocal/*.js"
+    },
     "./types/*": {
       "types": "./dist/types/*.d.ts"
     },
