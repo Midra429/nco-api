@@ -78,12 +78,23 @@ describe('check', () => {
   // })
 
   test('jikkyo', async () => {
-    const res = await ncoApi.jikkyo.kakolog('jk211', {
-      starttime: 1672932600, // 2023/01/06 00:30:00
-      endtime: 1672934400, // 2023/01/06 01:00:00
-      format: 'json',
+    const res = await ncoApi.jikkyo.kakolog(
+      'jk211',
+      {
+        starttime: 1672932600, // 2023/01/06 00:30:00
+        endtime: 1672934400, // 2023/01/06 01:00:00
+        format: 'json',
+      },
+      true
+    )
+
+    console.log({
+      id: res?.id,
+      fork: res?.fork,
+      commentCount: res?.commentCount,
+      comments: res?.comments.slice(0, 5),
     })
 
-    expect(!!res?.packet.length)
+    expect(!!res?.commentCount)
   })
 })
