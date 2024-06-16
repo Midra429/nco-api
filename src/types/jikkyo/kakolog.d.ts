@@ -1,24 +1,3 @@
-import type {
-  JIKKYO_CHANNELS_DTV,
-  JIKKYO_CHANNELS_BS_CS,
-  JIKKYO_CHANNELS,
-} from '../../constants'
-
-/**
- * 実況ID (地デジ)
- */
-export type JikkyoDtvId = keyof typeof JIKKYO_CHANNELS_DTV
-
-/**
- * 実況ID (BS, CS)
- */
-export type JikkyoBsCsId = keyof typeof JIKKYO_CHANNELS_BS_CS
-
-/**
- * 実況ID
- */
-export type JikkyoId = keyof typeof JIKKYO_CHANNELS
-
 /**
  * レスポンスのフォーマット
  */

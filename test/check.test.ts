@@ -3,6 +3,7 @@ import { describe, test, expect } from '@jest/globals'
 import { ncoParser } from '@midra/nco-parser'
 import { ncoApi } from '../src'
 import { applyNgSetting } from '../src/utils/applyNgSetting'
+import { syobocalToJikkyoChId } from '../src/utils/syobocalToJikkyoChId'
 
 describe('check', () => {
   // test('nco-parser', () => {
@@ -78,23 +79,82 @@ describe('check', () => {
   // })
 
   test('jikkyo', async () => {
-    const res = await ncoApi.jikkyo.kakolog(
-      'jk211',
-      {
-        starttime: 1672932600, // 2023/01/06 00:30:00
-        endtime: 1672934400, // 2023/01/06 01:00:00
-        format: 'json',
-      },
-      true
-    )
+    const TITLE = 'お兄ちゃんはおしまい！ #01 まひろとイケないカラダ'
 
-    console.log({
-      id: res?.id,
-      fork: res?.fork,
-      commentCount: res?.commentCount,
-      comments: res?.comments.slice(0, 5),
-    })
+    const { workTitle, season, episode } = ncoParser.extract(TITLE)
 
-    expect(!!res?.commentCount)
-  })
+    if (workTitle && episode) {
+      const searchResponse = await ncoApi.syobocal.json('TitleSearch', {
+        Search: ncoParser.normalize(workTitle, { symbol: true }),
+        Limit: 10,
+      })
+
+      const searchResult =
+        searchResponse &&
+        Object.values(searchResponse.Titles).find((val) => {
+          const {
+            normalized: scNormalized,
+            workTitle: scWorkTitle,
+            season: scSeason,
+          } = ncoParser.extract(val.Title)
+
+          return (
+            workTitle === scNormalized ||
+            (workTitle === scWorkTitle && season?.number === scSeason?.number)
+          )
+        })
+
+      console.log('searchResult:', searchResult)
+
+      if (searchResult) {
+        const programResponse = await ncoApi.syobocal.json('ProgramByCount', {
+          Count: episode.number,
+          TID: searchResult.TID,
+        })
+
+        const programResults =
+          programResponse &&
+          Object.values(programResponse.Programs).filter((val) => {
+            return syobocalToJikkyoChId(val.ChID)
+          })
+
+        console.log('programResults:', programResults)
+
+        if (programResults?.length) {
+          const kakologs = await Promise.all(
+            programResults.map((val) => {
+              const jkChId = syobocalToJikkyoChId(val.ChID)!
+
+              return ncoApi.jikkyo.kakolog(
+                jkChId,
+                {
+                  starttime: parseInt(val.StTime),
+                  endtime: parseInt(val.EdTime),
+                  format: 'json',
+                },
+                true
+              )
+            })
+          )
+
+          console.log(
+            'kakologs:',
+            kakologs.map((val) => {
+              return (
+                val && {
+                  id: val.id,
+                  commentCount: val.commentCount,
+                  comments: val.comments.slice(0, 50).map((v) => v.body),
+                }
+              )
+            })
+          )
+
+          return expect(!!kakologs.flatMap((v) => v ?? []).length)
+        }
+      }
+    }
+
+    return expect(false)
+  }, 10000)
 })
