@@ -81,80 +81,10 @@ describe('check', () => {
   test('jikkyo', async () => {
     const TITLE = 'お兄ちゃんはおしまい！ #01 まひろとイケないカラダ'
 
-    const { workTitle, season, episode } = ncoParser.extract(TITLE)
+    const result = await ncoApi.searchSyobocal(TITLE)
 
-    if (workTitle && episode) {
-      const searchResponse = await ncoApi.syobocal.json('TitleSearch', {
-        Search: ncoParser.normalize(workTitle, { symbol: true }),
-        Limit: 10,
-      })
+    console.log(result)
 
-      const searchResult =
-        searchResponse &&
-        Object.values(searchResponse.Titles).find((val) => {
-          const {
-            normalized: scNormalized,
-            workTitle: scWorkTitle,
-            season: scSeason,
-          } = ncoParser.extract(val.Title)
-
-          return (
-            workTitle === scNormalized ||
-            (workTitle === scWorkTitle && season?.number === scSeason?.number)
-          )
-        })
-
-      console.log('searchResult:', searchResult)
-
-      if (searchResult) {
-        const programResponse = await ncoApi.syobocal.json('ProgramByCount', {
-          Count: episode.number,
-          TID: searchResult.TID,
-        })
-
-        const programResults =
-          programResponse &&
-          Object.values(programResponse.Programs).filter((val) => {
-            return syobocalToJikkyoChId(val.ChID)
-          })
-
-        console.log('programResults:', programResults)
-
-        if (programResults?.length) {
-          const kakologs = await Promise.all(
-            programResults.map((val) => {
-              const jkChId = syobocalToJikkyoChId(val.ChID)!
-
-              return ncoApi.jikkyo.kakolog(
-                jkChId,
-                {
-                  starttime: parseInt(val.StTime),
-                  endtime: parseInt(val.EdTime),
-                  format: 'json',
-                },
-                true
-              )
-            })
-          )
-
-          console.log(
-            'kakologs:',
-            kakologs.map((val) => {
-              return (
-                val && {
-                  id: val.id,
-                  commentCount: val.commentCount,
-                  comments: val.comments.slice(0, 50).map((v) => v.body),
-                }
-              )
-            })
-          )
-
-          return expect(!!kakologs.flatMap((v) => v ?? []).length)
-        }
-      }
-    }
-
-    return expect(false)
+    return expect(!!result)
   }, 10000)
 })
