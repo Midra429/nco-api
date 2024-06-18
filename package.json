@@ -42,6 +42,11 @@
       "import": "./dist/constants.js",
       "default": "./dist/constants.js"
     },
+    "./danime/*": {
+      "types": "./dist/danime/*.d.ts",
+      "import": "./dist/danime/*.js",
+      "default": "./dist/danime/*.js"
+    },
     "./jikkyo/*": {
       "types": "./dist/jikkyo/*.d.ts",
       "import": "./dist/jikkyo/*.js",
