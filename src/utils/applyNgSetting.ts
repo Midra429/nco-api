@@ -1,41 +1,37 @@
-import type { ThreadsData } from '../types/niconico/threads'
-import type { Ng, ViewerItem } from '../types/niconico/video'
+import type { V1Thread } from '@xpadev-net/niconicomments'
+
+export type NgSetting = {
+  word: string[]
+  id: string[]
+  command: string[]
+}
 
 export const applyNgSetting = (
-  threadsData: ThreadsData,
-  ng: Ng
-): ThreadsData => {
-  if (ng.viewer?.items) {
-    const ngItems: {
-      [key in ViewerItem['type']]: string[]
-    } = {
-      // コメント
-      word: [],
-      // ユーザーID
-      id: [],
-      // コマンド
-      command: [],
-    }
+  threads: V1Thread[],
+  ngSetting: NgSetting
+): V1Thread[] => {
+  const applied: V1Thread[] = []
 
-    for (const item of ng.viewer.items) {
-      ngItems[item.type].push(item.source)
-    }
+  for (const thread of threads) {
+    let commentCount = thread.commentCount
 
-    for (const thread of threadsData.threads) {
-      thread.comments = thread.comments.filter((comment) => {
-        const isNg =
-          ngItems.word.some((v) => comment.body.includes(v)) ||
-          ngItems.id.includes(comment.userId) ||
-          comment.commands.some((v) => ngItems.command.includes(v))
+    const comments = thread.comments.flatMap((cmt) => {
+      const isNg =
+        ngSetting.word.some((v) => cmt.body.includes(v)) ||
+        ngSetting.id.includes(cmt.userId) ||
+        cmt.commands.some((v) => ngSetting.command.includes(v))
 
-        if (isNg) {
-          thread.commentCount--
-        }
+      if (isNg) {
+        commentCount--
 
-        return !isNg
-      })
-    }
+        return []
+      }
+
+      return cmt
+    })
+
+    applied.push({ ...thread, comments })
   }
 
-  return threadsData
+  return threads
 }
