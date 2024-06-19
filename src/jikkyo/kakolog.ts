@@ -77,9 +77,10 @@ export const kakolog = async <
 
             const comments: V1Thread['comments'] = json.packet.flatMap(
               ({ chat }, idx) => {
-                const date_ms = Math.trunc(
-                  parseInt(chat.date) * 1000 + parseInt(chat.date_usec) / 1000
-                )
+                const date_ms =
+                  ((parseInt(chat.date) * 1000) | 0) +
+                  (chat.date_usec ? (parseInt(chat.date_usec) / 1000) | 0 : 0)
+
                 const vposMs = date_ms - starttime_ms
 
                 return !isCommentWithCommand(chat.content)

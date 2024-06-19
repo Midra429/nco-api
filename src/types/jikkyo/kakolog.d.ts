@@ -42,7 +42,7 @@ export type JikkyoKakologChatData = {
    * @description コメント投稿時間の正確なタイムスタンプは\
    * date: 1606431600・date_usec: 257855 なら 1606431600.257855 のようになる
    */
-  date_usec: string
+  date_usec?: string
 
   /**
    * ユーザー ID
