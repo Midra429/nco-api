@@ -2,10 +2,11 @@ import { ncoParser } from '@midra/nco-parser'
 import { json as syobocalJson } from '../syobocal'
 import { syobocalToJikkyoChId } from '../utils/syobocalToJikkyoChId'
 
-export const syobocal = async (title: string) => {
+export const syobocal = async (title: string, ep?: number) => {
   const { workTitle, season, episode } = ncoParser.extract(title)
+  const epNum = episode?.number ?? ep
 
-  if (!workTitle || !episode) {
+  if (!workTitle || !epNum) {
     return null
   }
 
@@ -38,17 +39,16 @@ export const syobocal = async (title: string) => {
     // しょぼいカレンダー サブタイトル 取得
     syobocalJson('SubTitles', {
       TID: searchResult.TID,
-      Count: episode.number,
+      Count: epNum,
     }),
     // しょぼいカレンダー 放送時間 取得
     syobocalJson('ProgramByCount', {
       TID: searchResult.TID,
-      Count: episode.number,
+      Count: epNum,
     }),
   ])
 
-  const subTitleResult =
-    subTitlesResponse?.SubTitles[searchResult.TID][episode.number]
+  const subTitleResult = subTitlesResponse?.SubTitles[searchResult.TID][epNum]
 
   const programResults =
     programResponse &&
@@ -63,7 +63,7 @@ export const syobocal = async (title: string) => {
   return {
     title: searchResult,
     subTitle: subTitleResult,
-    subTitleCount: episode.number,
+    subTitleCount: epNum,
     program: programResults,
   }
 }
