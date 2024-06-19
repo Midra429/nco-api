@@ -27,7 +27,11 @@ export const search = async (...args: Parameters<typeof buildSearchQuery>) => {
       'title',
       'userId',
       'channelId',
+      'viewCounter',
       'lengthSeconds',
+      'thumbnailUrl',
+      'startTime',
+      'commentCounter',
       'tags',
     ],
   })
