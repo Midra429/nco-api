@@ -85,7 +85,7 @@ export const kakolog = async <
 
                 return !isCommentWithCommand(chat.content)
                   ? {
-                      id: chat.thread,
+                      id: `${chat.thread}:${chat.no}`,
                       no: idx + 1,
                       vposMs: vposMs,
                       body: chat.content,
