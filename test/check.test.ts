@@ -79,9 +79,9 @@ describe('check', () => {
   // })
 
   test('jikkyo', async () => {
-    const TITLE = 'お兄ちゃんはおしまい！ #01 まひろとイケないカラダ'
+    const title = 'お兄ちゃんはおしまい！ #01 まひろとイケないカラダ'
 
-    const result = await ncoApi.searchSyobocal(TITLE)
+    const result = await ncoApi.searchSyobocal({ title })
 
     console.log(result)
 
