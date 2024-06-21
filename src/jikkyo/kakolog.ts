@@ -33,7 +33,7 @@ export const kakolog = async <
   params: JikkyoKakologParams<Format>,
   options?: {
     compatV1Thread?: Compat
-    useragent?: string
+    userAgent?: string
   }
 ): Promise<Result | null> => {
   if (params.starttime < params.endtime) {
@@ -55,8 +55,8 @@ export const kakolog = async <
 
     const headers = new Headers()
 
-    if (options?.useragent) {
-      headers.set('User-Agent', options.useragent)
+    if (options?.userAgent) {
+      headers.set('User-Agent', options.userAgent)
     }
 
     try {

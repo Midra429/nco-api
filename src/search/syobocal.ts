@@ -7,11 +7,11 @@ import { json as syobocalJson } from '../syobocal'
 export const syobocal = async ({
   title,
   ep,
-  useragent,
+  userAgent,
 }: {
   title: string
   ep?: number
-  useragent?: string
+  userAgent?: string
 }) => {
   const { workTitle, season, episode } = ncoParser.extract(title)
   const epNum = ep ?? episode?.number
@@ -27,7 +27,7 @@ export const syobocal = async ({
       Search: ncoParser.normalizeAll(workTitle, { space: false }),
       Limit: 5,
     },
-    { useragent }
+    { userAgent }
   )
 
   const searchResult =
@@ -57,7 +57,7 @@ export const syobocal = async ({
         Count: epNum,
         ChID: CHANNEL_IDS_JIKKYO_SYOBOCAL.map((v) => v[1]),
       },
-      { useragent }
+      { userAgent }
     )) ?? {}
 
   if (!Programs) {

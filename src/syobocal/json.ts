@@ -11,7 +11,7 @@ export const json = async <Command extends SyoboCalRequestCommand>(
   commands: Command[],
   params: SyoboCalParameters<Command>,
   options?: {
-    useragent?: string
+    userAgent?: string
   }
 ): Promise<UnionToIntersection<SyoboCalResponse<Command>> | null> => {
   const url = new URL(API_BASE_URL)
@@ -25,8 +25,8 @@ export const json = async <Command extends SyoboCalRequestCommand>(
 
   const headers = new Headers()
 
-  if (options?.useragent) {
-    headers.set('User-Agent', options.useragent)
+  if (options?.userAgent) {
+    headers.set('User-Agent', options.userAgent)
   }
 
   try {

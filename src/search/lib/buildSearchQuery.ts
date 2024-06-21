@@ -15,6 +15,8 @@ export type BuildSearchQueryOptions = {
   chapter?: boolean
   /** コメント専用動画 */
   szbh?: boolean
+  /** User-Agent */
+  userAgent?: string
 }
 
 /**
@@ -221,6 +223,6 @@ export const buildSearchQuery = ({
     jsonFilter,
     _sort: '-startTime',
     _limit: 20,
-    _context: 'nco-api',
+    _context: options.userAgent || 'nco-api',
   }
 }
