@@ -31,7 +31,10 @@ export const kakolog = async <
 >(
   jkChId: JikkyoChannelId,
   params: JikkyoKakologParams<Format>,
-  compatV1Thread?: Compat
+  options?: {
+    compatV1Thread?: Compat
+    useragent?: string
+  }
 ): Promise<Result | null> => {
   if (params.starttime < params.endtime) {
     const url = new URL(jkChId, API_BASE_URL)
@@ -44,14 +47,20 @@ export const kakolog = async <
       params.endtime instanceof Date
         ? params.endtime.getTime() / 1000
         : params.endtime
-    const format = compatV1Thread ? 'json' : params.format
+    const format = options?.compatV1Thread ? 'json' : params.format
 
     url.searchParams.set('starttime', starttime.toString())
     url.searchParams.set('endtime', endtime.toString())
     url.searchParams.set('format', format)
 
+    const headers = new Headers()
+
+    if (options?.useragent) {
+      headers.set('User-Agent', options.useragent)
+    }
+
     try {
-      const response = await fetch(url)
+      const response = await fetch(url, { headers })
 
       switch (format) {
         case 'xml': {
@@ -73,7 +82,7 @@ export const kakolog = async <
             )
           }
 
-          if (compatV1Thread) {
+          if (options?.compatV1Thread) {
             const starttime_ms = starttime * 1000
 
             const comments: V1Thread['comments'] = json.packet.flatMap(

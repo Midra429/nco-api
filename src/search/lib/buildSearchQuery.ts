@@ -134,10 +134,10 @@ const getJsonFilterChapter = ({
   }
 }
 
-export const buildSearchQuery = (
-  title: string,
-  options: BuildSearchQueryOptions = {}
-): Pick<
+export const buildSearchQuery = ({
+  title,
+  ...options
+}: { title: string } & BuildSearchQueryOptions): Pick<
   SearchQuery,
   'q' | 'targets' | 'jsonFilter' | '_sort' | '_limit' | '_context'
 > => {

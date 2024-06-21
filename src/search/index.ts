@@ -18,7 +18,7 @@ const validateChapters = (
 }
 
 export const search = async (...args: Parameters<typeof buildSearchQuery>) => {
-  const [title, options] = args
+  const [{ title, ...options }] = args
 
   const response = await niconicoSearch({
     ...buildSearchQuery(...args),

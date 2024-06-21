@@ -4,19 +4,31 @@ import { CHANNEL_IDS_JIKKYO_SYOBOCAL } from '../constants'
 
 import { json as syobocalJson } from '../syobocal'
 
-export const syobocal = async (title: string, ep?: number) => {
+export const syobocal = async ({
+  title,
+  ep,
+  useragent,
+}: {
+  title: string
+  ep?: number
+  useragent?: string
+}) => {
   const { workTitle, season, episode } = ncoParser.extract(title)
-  const epNum = episode?.number ?? ep
+  const epNum = ep ?? episode?.number
 
   if (!workTitle || !epNum) {
     return null
   }
 
   // しょぼいカレンダー 検索
-  const searchResponse = await syobocalJson(['TitleSearch'], {
-    Search: ncoParser.normalizeAll(workTitle, { space: false }),
-    Limit: 5,
-  })
+  const searchResponse = await syobocalJson(
+    ['TitleSearch'],
+    {
+      Search: ncoParser.normalizeAll(workTitle, { space: false }),
+      Limit: 5,
+    },
+    { useragent }
+  )
 
   const searchResult =
     searchResponse &&
@@ -38,11 +50,15 @@ export const syobocal = async (title: string, ep?: number) => {
   }
 
   const { SubTitles, Programs } =
-    (await syobocalJson(['SubTitles', 'ProgramByCount'], {
-      TID: searchResult.TID,
-      Count: epNum,
-      ChID: CHANNEL_IDS_JIKKYO_SYOBOCAL.map((v) => v[1]),
-    })) ?? {}
+    (await syobocalJson(
+      ['SubTitles', 'ProgramByCount'],
+      {
+        TID: searchResult.TID,
+        Count: epNum,
+        ChID: CHANNEL_IDS_JIKKYO_SYOBOCAL.map((v) => v[1]),
+      },
+      { useragent }
+    )) ?? {}
 
   if (!Programs) {
     return null

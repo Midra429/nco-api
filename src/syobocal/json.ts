@@ -9,7 +9,10 @@ const API_BASE_URL = 'https://cal.syoboi.jp/json.php'
 
 export const json = async <Command extends SyoboCalRequestCommand>(
   commands: Command[],
-  params: SyoboCalParameters<Command>
+  params: SyoboCalParameters<Command>,
+  options?: {
+    useragent?: string
+  }
 ): Promise<UnionToIntersection<SyoboCalResponse<Command>> | null> => {
   const url = new URL(API_BASE_URL)
 
@@ -20,8 +23,14 @@ export const json = async <Command extends SyoboCalRequestCommand>(
     url.searchParams.set(key, Array.isArray(val) ? val.join() : val.toString())
   }
 
+  const headers = new Headers()
+
+  if (options?.useragent) {
+    headers.set('User-Agent', options.useragent)
+  }
+
   try {
-    const response = await fetch(url)
+    const response = await fetch(url, { headers })
     const json = await response.json()
 
     if (
