@@ -25,7 +25,7 @@ export const syobocal = async ({
     ['TitleSearch'],
     {
       Search: ncoParser.normalizeAll(workTitle, { space: false }),
-      Limit: 5,
+      Limit: 10,
     },
     { userAgent }
   )
@@ -40,8 +40,8 @@ export const syobocal = async ({
       } = ncoParser.extract(val.Title)
 
       return (
-        workTitle === scNormalized ||
-        (workTitle === scWorkTitle && season?.number === scSeason?.number)
+        (workTitle === scNormalized || workTitle === scWorkTitle) &&
+        season?.number === scSeason?.number
       )
     })
 
