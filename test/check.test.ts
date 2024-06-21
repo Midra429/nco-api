@@ -79,12 +79,13 @@ describe('check', () => {
   // })
 
   test('jikkyo', async () => {
-    const title = 'お兄ちゃんはおしまい！ #01 まひろとイケないカラダ'
+    // const title = 'お兄ちゃんはおしまい！ #01 まひろとイケないカラダ'
+    const title = '僕のヒーローアカデミア　第7期 第144話 DIVISION'
 
     const result = await ncoApi.searchSyobocal({ title })
 
     console.log(result)
 
-    return expect(!!result)
+    expect(!!result).toBe(true)
   }, 10000)
 })
