@@ -1,3 +1,4 @@
+import type { UnionToIntersection } from 'utility-types'
 import type {
   SyoboCalRequestCommand,
   SyoboCalParameters,
@@ -7,12 +8,12 @@ import type {
 const API_BASE_URL = 'https://cal.syoboi.jp/json.php'
 
 export const json = async <Command extends SyoboCalRequestCommand>(
-  command: Command,
-  params: SyoboCalParameters[Command]
-): Promise<SyoboCalResponse[Command] | null> => {
+  commands: Command[],
+  params: SyoboCalParameters<Command>
+): Promise<UnionToIntersection<SyoboCalResponse<Command>> | null> => {
   const url = new URL(API_BASE_URL)
 
-  url.searchParams.set('Req', command)
+  url.searchParams.set('Req', commands.join())
 
   for (const key in params) {
     const val = params[key] as string | string[] | number
@@ -21,7 +22,7 @@ export const json = async <Command extends SyoboCalRequestCommand>(
 
   try {
     const response = await fetch(url)
-    const json: SyoboCalResponse[Command] = await response.json()
+    const json = await response.json()
 
     if (
       !(

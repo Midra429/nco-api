@@ -1,3 +1,3 @@
-export const zeroPadding = (str: string, len: number) => {
-  return (Array(len).fill(0).join('') + str).slice(len * -1)
+export const zeroPadding = (target: string | number, length: number) => {
+  return target.toString().padStart(length, '0')
 }

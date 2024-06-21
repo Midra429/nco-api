@@ -63,6 +63,7 @@ export const kakolog = async <
 
           return xml as Result
         }
+
         case 'json': {
           const json: JikkyoKakologResponse<'json'> = await response.json()
 
@@ -77,29 +78,31 @@ export const kakolog = async <
 
             const comments: V1Thread['comments'] = json.packet.flatMap(
               ({ chat }, idx) => {
+                if (isCommentWithCommand(chat.content)) {
+                  return []
+                }
+
                 const date_ms = Math.trunc(
                   parseInt(chat.date) * 1000 +
                     (chat.date_usec ? parseInt(chat.date_usec) / 1000 : 0)
                 )
                 const vposMs = date_ms - starttime_ms
 
-                return !isCommentWithCommand(chat.content)
-                  ? {
-                      id: `${chat.thread}:${chat.no}`,
-                      no: idx + 1,
-                      vposMs: vposMs,
-                      body: chat.content,
-                      commands: chat.mail?.split(' ') ?? [],
-                      userId: chat.user_id,
-                      isPremium: chat.premium === '1',
-                      score: 0,
-                      postedAt: toISOStringTz(new Date(date_ms)),
-                      nicoruCount: 0,
-                      nicoruId: null,
-                      source: 'truck',
-                      isMyPost: false,
-                    }
-                  : []
+                return {
+                  id: `${chat.thread}:${chat.no}`,
+                  no: idx + 1,
+                  vposMs: vposMs,
+                  body: chat.content,
+                  commands: chat.mail?.split(' ') ?? [],
+                  userId: chat.user_id,
+                  isPremium: chat.premium === '1',
+                  score: 0,
+                  postedAt: toISOStringTz(new Date(date_ms)),
+                  nicoruCount: 0,
+                  nicoruId: null,
+                  source: 'truck',
+                  isMyPost: false,
+                }
               }
             )
 
