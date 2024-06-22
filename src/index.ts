@@ -4,6 +4,8 @@ import * as niconico from './niconico'
 import * as jikkyo from './jikkyo'
 import * as syobocal from './syobocal'
 import * as danime from './danime'
+import * as abema from './abema'
+import * as dmmTv from './dmmTv'
 
 export const ncoApi = {
   search,
@@ -12,4 +14,6 @@ export const ncoApi = {
   jikkyo,
   syobocal,
   danime,
+  abema,
+  dmmTv,
 }

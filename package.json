@@ -37,6 +37,11 @@
       "import": "./dist/*/index.js",
       "default": "./dist/*/index.js"
     },
+    "./abema/*": {
+      "types": "./dist/abema/*.d.ts",
+      "import": "./dist/abema/*.js",
+      "default": "./dist/abema/*.js"
+    },
     "./constants": {
       "types": "./dist/constants.d.ts",
       "import": "./dist/constants.js",
@@ -46,6 +51,11 @@
       "types": "./dist/danime/*.d.ts",
       "import": "./dist/danime/*.js",
       "default": "./dist/danime/*.js"
+    },
+    "./dmmTv/*": {
+      "types": "./dist/dmmTv/*.d.ts",
+      "import": "./dist/dmmTv/*.js",
+      "default": "./dist/dmmTv/*.js"
     },
     "./jikkyo/*": {
       "types": "./dist/jikkyo/*.d.ts",
