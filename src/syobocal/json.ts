@@ -34,16 +34,12 @@ export const json = async <Command extends SyoboCalRequestCommand>(
     const json = await response.json()
 
     if (
-      !(
-        ('Titles' in json && json['Titles']) ||
-        ('Programs' in json && json['Programs']) ||
-        ('SubTitles' in json && json['SubTitles'])
-      )
+      ('Titles' in json && json['Titles']) ||
+      ('Programs' in json && json['Programs']) ||
+      ('SubTitles' in json && json['SubTitles'])
     ) {
-      throw new Error(`${response.status} ${response.statusText}`)
+      return json
     }
-
-    return json
   } catch (err) {
     console.error('[nco-api/syobocal/json]', err)
   }

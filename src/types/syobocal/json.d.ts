@@ -63,8 +63,8 @@ type SyoboCalJson = {
 
   ProgramByPID: {
     parameters: {
-      PID: string
-      TID?: string
+      PID: string | string[]
+      TID?: string | string[]
       ChID?: SyoboCalChannelId | SyoboCalChannelId[]
     }
     response: {
@@ -88,8 +88,8 @@ type SyoboCalJson = {
 
   ProgramByCount: {
     parameters: {
-      TID: string
-      Count: number
+      TID: string | string[]
+      Count: number | number[]
       ChID?: SyoboCalChannelId | SyoboCalChannelId[]
     }
     response: SyoboCalJson['ProgramByPID']['response']
@@ -105,7 +105,7 @@ type SyoboCalJson = {
        * @description Startからの日数(1～32)
        */
       Days: number
-      TID?: string
+      TID?: string | string[]
       ChID?: SyoboCalChannelId | SyoboCalChannelId[]
     }
     response: SyoboCalJson['ProgramByPID']['response']
@@ -113,8 +113,8 @@ type SyoboCalJson = {
 
   SubTitles: {
     parameters: {
-      TID: string
-      Count?: number
+      TID: string | string[]
+      Count?: number | number[]
     }
     response: {
       SubTitles: {
@@ -148,6 +148,7 @@ type SyoboCalJson = {
         > & {
           Comment: string
           Search: 1
+          Programs?: SyoboCalJson['ProgramByPID']['response']['Programs'][string][]
         }
       }
     }

@@ -20,24 +20,28 @@ export const syobocal = async ({
     return null
   }
 
-  // しょぼいカレンダー 検索
+  const normalizedWorkTitle = ncoParser
+    .normalizeAll(workTitle, { space: false })
+    .toUpperCase()
+
+  // 検索
   const searchResponse = await syobocalJson(
     ['TitleSearch'],
     {
-      Search: ncoParser.normalizeAll(workTitle, { space: false }),
+      Search: normalizedWorkTitle,
       Limit: 10,
     },
     { userAgent }
   )
 
-  const searchResult =
+  const searchResults =
     searchResponse &&
-    Object.values(searchResponse.Titles).find((val) => {
+    Object.values(searchResponse.Titles).filter((val) => {
       const {
         normalized: scNormalized,
         workTitle: scWorkTitle,
         season: scSeason,
-      } = ncoParser.extract(val.Title)
+      } = ncoParser.extract(val.Title.replace(/\(第[2-9]クール\)$/g, ''))
 
       return (
         (workTitle === scNormalized || workTitle === scWorkTitle) &&
@@ -45,7 +49,7 @@ export const syobocal = async ({
       )
     })
 
-  if (!searchResult) {
+  if (!searchResults?.length) {
     return null
   }
 
@@ -53,7 +57,7 @@ export const syobocal = async ({
     (await syobocalJson(
       ['SubTitles', 'ProgramByCount'],
       {
-        TID: searchResult.TID,
+        TID: searchResults.map((v) => v.TID),
         Count: epNum,
         ChID: CHANNEL_IDS_JIKKYO_SYOBOCAL.map((v) => v[1]),
       },
@@ -64,11 +68,12 @@ export const syobocal = async ({
     return null
   }
 
-  const subTitleResult = SubTitles?.[searchResult.TID][epNum]
+  const TID = SubTitles && Object.keys(SubTitles)[0]
+  const subTitleResult = TID && SubTitles[TID][epNum]
   const programResults = Object.values(Programs)
 
   return {
-    title: searchResult,
+    title: searchResults.find((v) => v.TID === TID)!,
     subTitle: subTitleResult,
     subTitleCount: epNum,
     program: programResults,

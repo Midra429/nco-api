@@ -33,11 +33,9 @@ export const video = async (variables: {
     })
     const json: Video = await response.json()
 
-    if (!json.data.video) {
-      throw new Error(`${response.status} ${response.statusText}`)
+    if (json.data.video) {
+      return json.data.video
     }
-
-    return json.data.video
   } catch (err) {
     console.error('[nco-api/dmmTv/video]', err)
   }

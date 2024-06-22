@@ -12,11 +12,9 @@ export const part = async (partId: string): Promise<PartData | null> => {
     const response = await fetch(url)
     const json: Part = await response.json()
 
-    if (!json.data) {
-      throw new Error(`${response.status} ${response.statusText}`)
+    if (json.data) {
+      return json.data
     }
-
-    return json.data
   } catch (err) {
     console.error('[nco-api/danime/part]', err)
   }

@@ -66,11 +66,9 @@ export const kakolog = async <
         case 'xml': {
           const xml: JikkyoKakologResponse<'xml'> = await response.text()
 
-          if (!xml) {
-            throw new Error(`${response.status} ${response.statusText}`)
+          if (xml) {
+            return xml as Result
           }
-
-          return xml as Result
         }
 
         case 'json': {

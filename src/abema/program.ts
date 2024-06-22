@@ -19,11 +19,9 @@ export const program = async (id: string) => {
       })
       const json: Program = await response.json()
 
-      if (!json) {
-        throw new Error(`${response.status} ${response.statusText}`)
+      if (json) {
+        return json
       }
-
-      return json
     } catch (err) {
       console.error('[nco-api/abema/program]', err)
     }
