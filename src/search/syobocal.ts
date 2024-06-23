@@ -13,7 +13,7 @@ export const syobocal = async ({
   ep?: number
   userAgent?: string
 }) => {
-  const { workTitle, season, episode } = ncoParser.extract(title)
+  const { workTitle, season, episode, subTitle } = ncoParser.extract(title)
   const epNum = ep ?? episode?.number
 
   if (!workTitle || !epNum) {
@@ -64,13 +64,21 @@ export const syobocal = async ({
       { userAgent }
     )) ?? {}
 
-  if (!Programs) {
+  const TID = SubTitles && Object.keys(SubTitles)[0]
+  const subTitleResult = TID && SubTitles[TID][epNum]
+  const programResults = Programs && Object.values(Programs)
+
+  if (
+    subTitleResult &&
+    subTitle &&
+    ncoParser.normalizeAll(subTitleResult) !== ncoParser.normalizeAll(subTitle)
+  ) {
     return null
   }
 
-  const TID = SubTitles && Object.keys(SubTitles)[0]
-  const subTitleResult = TID && SubTitles[TID][epNum]
-  const programResults = Object.values(Programs)
+  if (!programResults) {
+    return null
+  }
 
   return {
     title: searchResults.find((v) => v.TID === TID)!,
