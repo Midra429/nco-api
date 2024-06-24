@@ -69,6 +69,7 @@ export const syobocal = async ({
   const programResults = Programs && Object.values(Programs)
 
   if (
+    season &&
     subTitleResult &&
     subTitle &&
     ncoParser.normalizeAll(subTitleResult) !== ncoParser.normalizeAll(subTitle)
