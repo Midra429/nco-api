@@ -41,7 +41,9 @@ export const syobocal = async ({
         normalized: scNormalized,
         workTitle: scWorkTitle,
         season: scSeason,
-      } = ncoParser.extract(val.Title.replace(/\(第[2-9]クール\)$/g, ''))
+      } = ncoParser.extract(
+        val.Title.replace(/\(第?[2-9](nd|rd|th)?クール\)$/g, '')
+      )
 
       return (
         (workTitle === scNormalized || workTitle === scWorkTitle) &&
