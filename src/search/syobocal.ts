@@ -54,7 +54,8 @@ export const syobocal = async ({
       )
 
       return (
-        (workTitle === scNormalized || workTitle === scWorkTitle) &&
+        (ncoParser.compare(workTitle, scNormalized, false) ||
+          ncoParser.compare(workTitle, scWorkTitle ?? '', false)) &&
         season?.number === scSeason?.number
       )
     })
