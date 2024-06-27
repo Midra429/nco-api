@@ -1,4 +1,5 @@
 import { ncoParser } from '@midra/nco-parser'
+import { romanNum as removeRomanNum } from '@midra/nco-parser/normalize/lib/remove/romanNum'
 
 import { CHANNEL_IDS_JIKKYO_SYOBOCAL } from '../constants'
 
@@ -20,16 +21,23 @@ export const syobocal = async ({
     return null
   }
 
-  const normalizedWorkTitle = ncoParser
-    .normalizeAll(workTitle, { space: false })
-    .toUpperCase()
+  const searchWord = removeRomanNum(
+    ncoParser.normalizeAll(workTitle, {
+      adjust: {
+        letterCase: 'upper',
+      },
+      remove: {
+        space: false,
+      },
+    })
+  )
 
   // 検索
   const searchResponse = await syobocalJson(
     ['TitleSearch'],
     {
-      Search: normalizedWorkTitle,
-      Limit: 10,
+      Search: searchWord,
+      Limit: 15,
     },
     { userAgent }
   )
