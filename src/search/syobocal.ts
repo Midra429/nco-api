@@ -4,6 +4,7 @@ import { romanNum as removeRomanNum } from '@midra/nco-parser/normalize/lib/remo
 import { CHANNEL_IDS_JIKKYO_SYOBOCAL } from '../constants'
 
 import { json as syobocalJson } from '../syobocal'
+import { similarity } from '@midra/nco-parser/utils/similarity'
 
 export const syobocal = async ({
   title,
@@ -17,7 +18,7 @@ export const syobocal = async ({
   const { workTitle, season, episode, subTitle } = ncoParser.extract(title)
   const epNum = ep ?? episode?.number
 
-  if (!workTitle || !epNum) {
+  if (!workTitle || epNum == null) {
     return null
   }
 
@@ -42,28 +43,28 @@ export const syobocal = async ({
     { userAgent }
   )
 
-  const searchResults =
-    searchResponse &&
-    Object.values(searchResponse.Titles).filter((val) => {
-      const {
-        normalized: scNormalized,
-        workTitle: scWorkTitle,
-        season: scSeason,
-      } = ncoParser.extract(
-        val.Title.replace(/\(第?[2-9](nd|rd|th)?クール\)$/g, '')
-      )
-
-      return (
-        (ncoParser.compare(workTitle, scNormalized, false) ||
-          ncoParser.compare(workTitle, scWorkTitle ?? '', false)) &&
-        season?.number === scSeason?.number
-      )
-    })
-
-  if (!searchResults?.length) {
+  if (!searchResponse) {
     return null
   }
 
+  // 検索結果を軽くフィルタ
+  const searchResults = Object.values(searchResponse.Titles).filter((val) => {
+    const { normalized: scNormalized, workTitle: scWorkTitle } =
+      ncoParser.extract(
+        val.Title.replace(/\(第?[2-9](nd|rd|th)?クール\)$/g, '')
+      )
+
+    return (
+      ncoParser.compare(workTitle, scNormalized) ||
+      (scWorkTitle && ncoParser.compare(workTitle, scWorkTitle))
+    )
+  })
+
+  if (!searchResults.length) {
+    return null
+  }
+
+  // サブタイトルと放送情報を取得
   const { SubTitles, Programs } =
     (await syobocalJson(
       ['SubTitles', 'ProgramByCount'],
@@ -75,27 +76,66 @@ export const syobocal = async ({
       { userAgent }
     )) ?? {}
 
-  const TID = SubTitles && Object.keys(SubTitles)[0]
-  const subTitleResult = TID && SubTitles[TID][epNum]
-  const programResults = Programs && Object.values(Programs)
-
-  if (
-    season &&
-    subTitleResult &&
-    subTitle &&
-    ncoParser.normalizeAll(subTitleResult) !== ncoParser.normalizeAll(subTitle)
-  ) {
+  if (!SubTitles || !Programs) {
     return null
   }
 
-  if (!programResults) {
+  let tid: string | null = null
+
+  if (searchResults.length === 1) {
+    tid = searchResults[0].TID
+  } else {
+    if (subTitle) {
+      const normalizedSubTitle = ncoParser.normalizeAll(subTitle)
+
+      for (const val of Object.entries(SubTitles)) {
+        if (
+          0.95 <=
+          similarity(normalizedSubTitle, ncoParser.normalizeAll(val[1][epNum]))
+        ) {
+          tid = val[0]
+
+          break
+        }
+      }
+    }
+
+    if (!tid) {
+      for (const val of searchResults) {
+        if (!(val.TID in SubTitles)) {
+          continue
+        }
+
+        const {
+          normalized: scNormalized,
+          workTitle: scWorkTitle,
+          season: scSeason,
+        } = ncoParser.extract(
+          val.Title.replace(/\(第?[2-9](nd|rd|th)?クール\)$/g, '')
+        )
+
+        if (
+          ncoParser.compare(workTitle, scNormalized, false) ||
+          (scWorkTitle &&
+            ncoParser.compare(workTitle, scWorkTitle, false) &&
+            season?.number === scSeason?.number)
+        ) {
+          tid = val.TID
+
+          break
+        }
+      }
+    }
+  }
+
+  if (!tid) {
     return null
   }
 
   return {
-    title: searchResults.find((v) => v.TID === TID)!,
-    subTitle: subTitleResult,
+    title: searchResults.find((v) => v.TID === tid)!,
+    subTitle: SubTitles[tid][epNum],
     subTitleCount: epNum,
-    program: programResults,
+    programs: Object.values(Programs).filter((v) => v.TID === tid),
   }
 }
