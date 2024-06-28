@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@midra/nco-parser':
-        specifier: ^0.3.8
-        version: 0.3.8
+        specifier: ^0.3.9
+        version: 0.3.9
     devDependencies:
       '@jest/globals':
         specifier: ^29.7.0
@@ -313,8 +313,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@midra/nco-parser@0.3.8':
-    resolution: {integrity: sha512-O1e/8bTg18+CausK8goCb6gnfpXVT7cPJest7AYCkTwnqzHdzpcY113B7/9HsLbP/WtK+UGZqXUHece0mEOSTg==}
+  '@midra/nco-parser@0.3.9':
+    resolution: {integrity: sha512-nQHvnNECuzGwFYwqJypfFIH9mVtP2Cu50ipLqSXPZYpopqoR91VgtuZ4vtNkM0+yxAkklnThf4fbDsK7Ss+F0A==}
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -683,8 +683,8 @@ packages:
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
 
-  electron-to-chromium@1.4.812:
-    resolution: {integrity: sha512-7L8fC2Ey/b6SePDFKR2zHAy4mbdp1/38Yk5TsARO66W3hC5KEaeKMMHoxwtuH+jcu2AYLSn9QX04i95t6Fl1Hg==}
+  electron-to-chromium@1.4.814:
+    resolution: {integrity: sha512-GVulpHjFu1Y9ZvikvbArHmAhZXtm3wHlpjTMcXNGKl4IQ4jMQjlnz8yMQYYqdLHKi/jEL2+CBC2akWVCoIGUdw==}
 
   emittery@0.13.1:
     resolution: {integrity: sha512-DeWwawk6r5yR9jFgnDKYt4sLS0LmHJJi3ZOnb5/JdbYwj3nW+FxQnHIjhBKz8YLC7oRNPVM9NQ47I3CVx34eqQ==}
@@ -1238,8 +1238,8 @@ packages:
   lodash.memoize@4.1.2:
     resolution: {integrity: sha512-t7j+NzmgnQzTAYXcsHYLgimltOV1MXHtlOWf6GjL9Kj8GK5FInw5JotxvbOs+IvV1/Dzo04/fCGfLVs7aXb4Ag==}
 
-  lru-cache@10.2.2:
-    resolution: {integrity: sha512-9hp3Vp2/hFQUiIwKo8XCeFVnrg8Pk3TYNPIR7tJADKi5YfcF7vEaK7avFHTlSy3kOKYaJQaalfEo6YuXdceBOQ==}
+  lru-cache@10.3.0:
+    resolution: {integrity: sha512-CQl19J/g+Hbjbv4Y3mFNNXFEL/5t/KCg8POCuUqd4rMKjGG+j1ybER83hxV58zL+dFI1PTkt3GNFSHRt+d8qEQ==}
     engines: {node: 14 || >=16.14}
 
   lru-cache@5.1.1:
@@ -2223,7 +2223,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@midra/nco-parser@0.3.8':
+  '@midra/nco-parser@0.3.9':
     dependencies:
       '@geolonia/japanese-numeral': 1.0.2
 
@@ -2456,7 +2456,7 @@ snapshots:
   browserslist@4.23.1:
     dependencies:
       caniuse-lite: 1.0.30001638
-      electron-to-chromium: 1.4.812
+      electron-to-chromium: 1.4.814
       node-releases: 2.0.14
       update-browserslist-db: 1.0.16(browserslist@4.23.1)
 
@@ -2640,7 +2640,7 @@ snapshots:
 
   eastasianwidth@0.2.0: {}
 
-  electron-to-chromium@1.4.812: {}
+  electron-to-chromium@1.4.814: {}
 
   emittery@0.13.1: {}
 
@@ -3359,7 +3359,7 @@ snapshots:
 
   lodash.memoize@4.1.2: {}
 
-  lru-cache@10.2.2: {}
+  lru-cache@10.3.0: {}
 
   lru-cache@5.1.1:
     dependencies:
@@ -3555,7 +3555,7 @@ snapshots:
 
   path-scurry@1.11.1:
     dependencies:
-      lru-cache: 10.2.2
+      lru-cache: 10.3.0
       minipass: 7.1.2
 
   picocolors@1.0.1: {}
