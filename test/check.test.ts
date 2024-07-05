@@ -81,10 +81,11 @@ describe('check', () => {
   test('jikkyo', async () => {
     // const title = 'お兄ちゃんはおしまい！ #01 まひろとイケないカラダ'
     // const title = '僕のヒーローアカデミア　第7期 第144話 DIVISION'
-    const title =
-      '無職転生Ⅱ ～異世界行ったら本気だす～ 2期 第0話 守護術師フィッツ'
+    // const title =
+    //   '無職転生Ⅱ ～異世界行ったら本気だす～ 2期 第0話 守護術師フィッツ'
     // const title =
     //   '魔王学院の不適合者 Ⅱ ～史上最強の魔王の始祖、転生して子孫たちの学校へ通う～ 第18話'
+    const title = '響け！ユーフォニアム３ 第8話 なやめるオスティナート'
 
     const result = await ncoApi.searchSyobocal({ title })
 
