@@ -49,13 +49,17 @@ export type PartData = {
   snsHatebu: string
   snsLine: string
   prevTitle: any
-  prevContentInfoUri: any
+  prevMainScenePath: string
+  prevPartDispNumber: string
+  prevPartTitle: string
+  prevPartExp: string
+  prevContentInfoUri: string | null
   nextTitle: string
   nextMainScenePath: string
   nextPartDispNumber: string
   nextPartTitle: string
   nextPartExp: string
-  nextContentInfoUri: string
+  nextContentInfoUri: string | null
   previousWebViewUrl: any
   adPartId: any
   adContentUri: any
