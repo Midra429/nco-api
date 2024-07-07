@@ -76,7 +76,7 @@ export const syobocal = async ({
       { userAgent }
     )) ?? {}
 
-  if (!SubTitles || !Programs) {
+  if (!Programs) {
     return null
   }
 
@@ -84,7 +84,7 @@ export const syobocal = async ({
 
   if (searchResults.length === 1) {
     tid = searchResults[0].TID
-  } else {
+  } else if (SubTitles) {
     if (subTitle) {
       const normalizedSubTitle = ncoParser.normalizeAll(subTitle)
 
@@ -134,7 +134,7 @@ export const syobocal = async ({
 
   return {
     title: searchResults.find((v) => v.TID === tid)!,
-    subTitle: SubTitles[tid][epNum],
+    subTitle: SubTitles?.[tid][epNum] ?? null,
     subTitleCount: epNum,
     programs: Object.values(Programs).filter((v) => v.TID === tid),
   }
