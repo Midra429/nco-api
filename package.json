@@ -87,7 +87,7 @@
     }
   },
   "dependencies": {
-    "@midra/nco-parser": "^1.0.0"
+    "@midra/nco-parser": "^1.0.1"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
