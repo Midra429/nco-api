@@ -86,7 +86,9 @@ describe('check', () => {
     // const title =
     //   '魔王学院の不適合者 Ⅱ ～史上最強の魔王の始祖、転生して子孫たちの学校へ通う～ 第18話'
     // const title = '響け！ユーフォニアム３ 第8話 なやめるオスティナート'
-    const title = 'となりの妖怪さん 第8話 　'
+    // const title = 'となりの妖怪さん 第8話 　'
+    const title =
+      '新米オッサン冒険者、最強パーティに死ぬほど鍛えられて無敵になる。 第2話'
 
     const result = await ncoApi.searchSyobocal({ title })
 

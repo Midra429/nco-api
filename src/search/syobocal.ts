@@ -1,10 +1,10 @@
 import { ncoParser } from '@midra/nco-parser'
+import { similarity } from '@midra/nco-parser/utils/similarity'
 import { romanNum as removeRomanNum } from '@midra/nco-parser/normalize/lib/remove/romanNum'
 
 import { CHANNEL_IDS_JIKKYO_SYOBOCAL } from '../constants'
 
 import { json as syobocalJson } from '../syobocal'
-import { similarity } from '@midra/nco-parser/utils/similarity'
 
 export const syobocal = async ({
   title,
@@ -85,6 +85,7 @@ export const syobocal = async ({
   if (searchResults.length === 1) {
     tid = searchResults[0].TID
   } else if (SubTitles) {
+    // サブタイトル比較
     if (subTitle) {
       const normalizedSubTitle = ncoParser.normalizeAll(subTitle)
 
@@ -101,6 +102,7 @@ export const syobocal = async ({
     }
 
     if (!tid) {
+      // 作品名比較
       for (const val of searchResults) {
         if (!(val.TID in SubTitles)) {
           continue
