@@ -87,7 +87,7 @@
     }
   },
   "dependencies": {
-    "@midra/nco-parser": "^1.0.1"
+    "@midra/nco-parser": "^1.0.2"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
@@ -95,8 +95,8 @@
     "cpx": "^1.5.0",
     "glob": "^11.0.0",
     "jest": "^29.7.0",
-    "rimraf": "^6.0.0",
-    "ts-jest": "^29.2.0",
+    "rimraf": "^6.0.1",
+    "ts-jest": "^29.2.2",
     "typescript": "^5.5.3",
     "utility-types": "^3.11.0"
   }
