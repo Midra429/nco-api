@@ -1,9 +1,9 @@
 import type { V1Thread } from '@xpadev-net/niconicomments'
 
 export type NgSetting = {
-  word: string[]
+  word: (string | RegExp)[]
+  command: (string | RegExp)[]
   id: string[]
-  command: string[]
 }
 
 export const applyNgSetting = (
@@ -17,9 +17,20 @@ export const applyNgSetting = (
 
     const comments = thread.comments.flatMap((cmt) => {
       const isNg =
-        ngSetting.word.some((v) => cmt.body.includes(v)) ||
-        ngSetting.id.includes(cmt.userId) ||
-        cmt.commands.some((v) => ngSetting.command.includes(v))
+        // 単語
+        ngSetting.word.some((ngWord) =>
+          typeof ngWord === 'string'
+            ? cmt.body.includes(ngWord)
+            : ngWord.test(cmt.body)
+        ) ||
+        // コマンド
+        cmt.commands.some((cmd) =>
+          ngSetting.command.some((ngCmd) =>
+            typeof ngCmd === 'string' ? cmd === ngCmd : ngCmd.test(cmd)
+          )
+        ) ||
+        // ユーザーID
+        ngSetting.id.includes(cmt.userId)
 
       if (isNg) {
         commentCount--
