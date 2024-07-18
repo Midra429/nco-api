@@ -2,7 +2,7 @@ import type { Program } from '../types/abema/program'
 
 const API_BASE_URL = 'https://api.p-c3-e.abema-tv.com/v1/video/programs/'
 
-export const program = async (id: string) => {
+export const program = async (id: string): Promise<Program | null> => {
   const token = localStorage.getItem('abm_token')
 
   if (token) {
