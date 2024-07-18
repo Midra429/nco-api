@@ -57,6 +57,11 @@
       "import": "./dist/dmmTv/*.js",
       "default": "./dist/dmmTv/*.js"
     },
+    "./fod/*": {
+      "types": "./dist/fod/*.d.ts",
+      "import": "./dist/fod/*.js",
+      "default": "./dist/fod/*.js"
+    },
     "./jikkyo/*": {
       "types": "./dist/jikkyo/*.d.ts",
       "import": "./dist/jikkyo/*.js",
@@ -79,6 +84,11 @@
     },
     "./types/*": {
       "types": "./dist/types/*.d.ts"
+    },
+    "./unext/*": {
+      "types": "./dist/unext/*.d.ts",
+      "import": "./dist/unext/*.js",
+      "default": "./dist/unext/*.js"
     },
     "./utils/*": {
       "types": "./dist/utils/*.d.ts",
