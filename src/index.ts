@@ -6,6 +6,8 @@ import * as syobocal from './syobocal'
 import * as danime from './danime'
 import * as abema from './abema'
 import * as dmmTv from './dmmTv'
+import * as fod from './fod'
+import * as unext from './unext'
 
 export const ncoApi = {
   search,
@@ -16,4 +18,6 @@ export const ncoApi = {
   danime,
   abema,
   dmmTv,
+  fod,
+  unext,
 }
