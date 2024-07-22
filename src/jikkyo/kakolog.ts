@@ -85,7 +85,7 @@ export const kakolog = async <
 
             const comments: V1Thread['comments'] = json.packet.flatMap(
               ({ chat }, idx) => {
-                if (isCommentWithCommand(chat.content)) {
+                if (isCommentWithCommand(chat.content) || chat.deleted) {
                   return []
                 }
 

@@ -71,6 +71,11 @@ export type JikkyoKakologChatData = {
    * @description AA など、まれに複数行コメントがあるので注意
    */
   content: string
+
+  /**
+   * 削除フラグ？
+   */
+  deleted?: string
 }
 
 export type JikkyoKakologResponseJsonOk = {
