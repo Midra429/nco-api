@@ -1,13 +1,13 @@
-import type { JikkyoChannelId } from '../types/constants'
+import type { JikkyoChannelId } from '../types/constants.js'
 import type {
   JikkyoKakologFormat,
   JikkyoKakologParams,
   JikkyoKakologResponse,
   JikkyoKakologResponseOk,
-} from '../types/jikkyo/kakolog'
+} from '../types/jikkyo/kakolog.js'
 import type { V1Thread } from '@xpadev-net/niconicomments'
 
-import { toISOStringTz } from '../utils/toISOStringTz'
+import { toISOStringTz } from '../utils/toISOStringTz.js'
 
 const API_BASE_URL = 'https://jikkyo.tsukumijima.net/api/kakolog/'
 

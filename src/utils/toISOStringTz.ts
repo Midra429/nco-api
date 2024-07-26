@@ -1,4 +1,4 @@
-import { zeroPadding } from './zeroPadding'
+import { zeroPadding } from './zeroPadding.js'
 
 export const toISOStringTz = (date: Date) => {
   const year = date.getFullYear().toString()

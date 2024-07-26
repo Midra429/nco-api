@@ -1,7 +1,7 @@
 import type {
   SearchQuery,
   SearchQueryJsonFilter,
-} from '../../types/niconico/search'
+} from '../../types/niconico/search.js'
 
 import { ncoParser } from '@midra/nco-parser'
 import { symbol as removeSymbol } from '@midra/nco-parser/normalize/lib/remove/symbol'

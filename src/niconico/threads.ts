@@ -1,5 +1,5 @@
-import type { Threads, ThreadsData } from '../types/niconico/threads'
-import type { NvComment } from '../types/niconico/video'
+import type { Threads, ThreadsData } from '../types/niconico/threads.js'
+import type { NvComment } from '../types/niconico/video.js'
 
 // const API_BASE_URL = 'https://nv-comment.nicovideo.jp'
 

@@ -2,9 +2,9 @@ import { ncoParser } from '@midra/nco-parser'
 import { similarity } from '@midra/nco-parser/utils/similarity'
 import { romanNum as removeRomanNum } from '@midra/nco-parser/normalize/lib/remove/romanNum'
 
-import { CHANNEL_IDS_JIKKYO_SYOBOCAL } from '../constants'
+import { CHANNEL_IDS_JIKKYO_SYOBOCAL } from '../constants.js'
 
-import { json as syobocalJson } from '../syobocal'
+import { json as syobocalJson } from '../syobocal/index.js'
 
 export const syobocal = async ({
   title,

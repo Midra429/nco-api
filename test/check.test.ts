@@ -1,9 +1,9 @@
 import { describe, test, expect } from '@jest/globals'
 
 import { ncoParser } from '@midra/nco-parser'
-import { ncoApi } from '../src'
-import { applyNgSetting } from '../src/utils/applyNgSetting'
-import { syobocalToJikkyoChId } from '../src/utils/syobocalToJikkyoChId'
+import { ncoApi } from '../dist/index.js'
+import { applyNgSetting } from '../dist/utils/applyNgSetting.js'
+import { syobocalToJikkyoChId } from '../dist/utils/syobocalToJikkyoChId.js'
 
 describe('check', () => {
   // test('nco-parser', () => {

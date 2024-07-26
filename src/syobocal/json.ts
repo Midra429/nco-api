@@ -3,7 +3,7 @@ import type {
   SyoboCalRequestCommand,
   SyoboCalParameters,
   SyoboCalResponse,
-} from '../types/syobocal/json'
+} from '../types/syobocal/json.js'
 
 const API_BASE_URL = 'https://cal.syoboi.jp/json.php'
 

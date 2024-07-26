@@ -3,7 +3,7 @@ import type {
   SearchQueryFieldKey,
   SearchResponse,
   SearchResponseOk,
-} from '../types/niconico/search'
+} from '../types/niconico/search.js'
 
 const API_BASE_URL =
   'https://snapshot.search.nicovideo.jp/api/v2/snapshot/video/contents/search'

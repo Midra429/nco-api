@@ -1,4 +1,4 @@
-import type { SyoboCalChannelId } from '../constants'
+import type { SyoboCalChannelId } from '../constants.js'
 
 export type SyoboCalRequestCommand = keyof SyoboCalJson
 

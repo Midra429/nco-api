@@ -1,4 +1,4 @@
-import type { Program } from '../types/abema/program'
+import type { Program } from '../types/abema/program.js'
 
 const API_BASE_URL = 'https://api.p-c3-e.abema-tv.com/v1/video/programs/'
 

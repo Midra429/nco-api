@@ -1,4 +1,4 @@
-import type { Episode } from '../types/fod/episode'
+import type { Episode } from '../types/fod/episode.js'
 
 const API_BASE_URL = 'https://i.fod.fujitv.co.jp/apps/api/episode/detail'
 

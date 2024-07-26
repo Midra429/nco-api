@@ -3,7 +3,7 @@ import type {
   JIKKYO_CHANNELS_BS_CS,
   JIKKYO_CHANNELS,
   SYOBOCAL_CHANNELS,
-} from '../constants'
+} from '../constants.js'
 
 /**
  * ニコニコ実況のチャンネルID (地デジ)

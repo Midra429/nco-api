@@ -2,7 +2,7 @@ import type {
   VideoResponse,
   VideoResponseOk,
   VideoData,
-} from '../types/niconico/video'
+} from '../types/niconico/video.js'
 
 const API_BASE_URL = 'https://www.nicovideo.jp/api/watch/v3/'
 const API_BASE_URL_GUEST = 'https://www.nicovideo.jp/api/watch/v3_guest/'

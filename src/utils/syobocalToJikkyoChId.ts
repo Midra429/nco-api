@@ -1,6 +1,6 @@
-import type { JikkyoChannelId, SyoboCalChannelId } from '../types/constants'
+import type { JikkyoChannelId, SyoboCalChannelId } from '../types/constants.js'
 
-import { CHANNEL_IDS_JIKKYO_SYOBOCAL } from '../constants'
+import { CHANNEL_IDS_JIKKYO_SYOBOCAL } from '../constants.js'
 
 export const syobocalToJikkyoChId = (
   scChId: SyoboCalChannelId

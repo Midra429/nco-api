@@ -1,9 +1,9 @@
-import type { SearchData } from '../types/niconico/search'
+import type { SearchData } from '../types/niconico/search.js'
 
-import { DANIME_CHANNEL_ID } from '../constants'
+import { DANIME_CHANNEL_ID } from '../constants.js'
 import { ncoParser } from '@midra/nco-parser'
-import { search as niconicoSearch } from '../niconico'
-import { buildSearchQuery } from './lib/buildSearchQuery'
+import { search as niconicoSearch } from '../niconico/index.js'
+import { buildSearchQuery } from './lib/buildSearchQuery.js'
 
 const validateChapters = (
   chapters: SearchData<'lengthSeconds'>[],

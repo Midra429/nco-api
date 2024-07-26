@@ -1,4 +1,4 @@
-import type { Title, TitleStage } from '../types/unext/title'
+import type { Title, TitleStage } from '../types/unext/title.js'
 
 const API_BASE_URL = 'https://cc.unext.jp'
 

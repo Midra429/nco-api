@@ -1,1 +1,1 @@
-export * from './kakolog'
+export * from './kakolog.js'

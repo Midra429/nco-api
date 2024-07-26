@@ -1,4 +1,4 @@
-import type { Video, DataVideo } from '../types/dmmTv/video'
+import type { Video, DataVideo } from '../types/dmmTv/video.js'
 
 const API_BASE_URL = 'https://api.tv.dmm.com/graphql'
 
