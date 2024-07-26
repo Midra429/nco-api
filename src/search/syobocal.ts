@@ -48,19 +48,47 @@ export const syobocal = async ({
   }
 
   // 検索結果を軽くフィルタ
-  const searchResults = Object.values(searchResponse.Titles).filter((val) => {
+  const searchResultTitles = Object.values(searchResponse.Titles)
+
+  const searchResults: typeof searchResultTitles = []
+  const searchResultsPartial: typeof searchResultTitles = []
+
+  const workTitleNormalized = ncoParser.normalize(workTitle, {
+    remove: {
+      bracket: true,
+    },
+  })
+
+  searchResultTitles.forEach((val) => {
     const { normalized: scNormalized, workTitle: scWorkTitle } =
       ncoParser.extract(
         val.Title.replace(/\(第?[2-9](nd|rd|th)?クール\)$/g, '')
       )
 
-    return (
+    if (
+      // タイトルが一致
       ncoParser.compare(workTitle, scNormalized) ||
+      // 作品名が一致
       (scWorkTitle && ncoParser.compare(workTitle, scWorkTitle))
-    )
+    ) {
+      searchResults.push(val)
+
+      return
+    }
+
+    if (
+      // タイトルが一致 (一部)
+      scNormalized.includes(workTitleNormalized)
+    ) {
+      searchResultsPartial.push(val)
+
+      return
+    }
   })
 
-  if (!searchResults.length) {
+  const searchResultsAll = [...searchResults, ...searchResultsPartial]
+
+  if (!searchResultsAll.length) {
     return null
   }
 
@@ -69,7 +97,7 @@ export const syobocal = async ({
     (await syobocalJson(
       ['SubTitles', 'ProgramByCount'],
       {
-        TID: searchResults.map((v) => v.TID),
+        TID: searchResultsAll.map((v) => v.TID),
         Count: epNum,
         ChID: CHANNEL_IDS_JIKKYO_SYOBOCAL.map((v) => v[1]),
       },
@@ -82,18 +110,17 @@ export const syobocal = async ({
 
   let tid: string | null = null
 
-  if (searchResults.length === 1) {
+  if (searchResults.length === 1 && !searchResultsPartial.length) {
     tid = searchResults[0].TID
   } else if (SubTitles) {
     // サブタイトル比較
     if (subTitle) {
-      const normalizedSubTitle = ncoParser.normalizeAll(subTitle)
+      const subTitleNormalized = ncoParser.normalizeAll(subTitle)
 
       for (const val of Object.entries(SubTitles)) {
-        if (
-          0.95 <=
-          similarity(normalizedSubTitle, ncoParser.normalizeAll(val[1][epNum]))
-        ) {
+        const scSubTitleNormalized = ncoParser.normalizeAll(val[1][epNum])
+
+        if (0.95 <= similarity(subTitleNormalized, scSubTitleNormalized)) {
           tid = val[0]
 
           break
@@ -135,8 +162,8 @@ export const syobocal = async ({
   }
 
   return {
-    title: searchResults.find((v) => v.TID === tid)!,
-    subTitle: SubTitles?.[tid][epNum] ?? null,
+    title: searchResultsAll.find((v) => v.TID === tid)!,
+    subTitle: SubTitles?.[tid]?.[epNum] ?? null,
     subTitleCount: epNum,
     programs: Object.values(Programs).filter((v) => v.TID === tid),
   }

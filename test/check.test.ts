@@ -89,7 +89,8 @@ describe('check', () => {
     // const title = 'となりの妖怪さん 第8話 　'
     // const title =
     //   '新米オッサン冒険者、最強パーティに死ぬほど鍛えられて無敵になる。 第2話'
-    const title = '杖と剣のウィストリア シーズン1, 第ニ話 不屈のごとく'
+    // const title = '杖と剣のウィストリア シーズン1, 第ニ話 不屈のごとく'
+    const title = 'SHY 第13話 ヒーローズ・ハイ'
 
     const result = await ncoApi.searchSyobocal({ title })
 
