@@ -11,13 +11,17 @@ export const parse = async (
       method: 'POST',
       headers: {
         'User-Agent': userAgent,
+        'X-NCO-Version': userAgent,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ input }),
     })
-    const json: ParseResult | null = await response.json()
 
-    return json
+    if (response.ok) {
+      const json: ParseResult | null = await response.json()
+
+      return json
+    }
   } catch (err) {
     console.error('[nco-api/nco/ai/parse]', err)
   }
