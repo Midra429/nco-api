@@ -137,26 +137,26 @@ const getJsonFilterChapter = ({
 }
 
 export const buildSearchQuery = ({
-  title,
+  rawText,
   ...options
-}: { title: string } & BuildSearchQueryOptions): Pick<
+}: { rawText: string } & BuildSearchQueryOptions): Pick<
   SearchQuery,
   'q' | 'targets' | 'jsonFilter' | '_sort' | '_limit' | '_context'
 > => {
   options.duration &&= Math.round(options.duration)
 
-  const extracted = ncoParser.extract(title)
+  const extracted = ncoParser.extract(rawText)
   const { season, episode } = extracted
-  let { normalized, workTitle, subTitle } = extracted
+  let { normalized, title, subtitle } = extracted
 
   normalized = removeSymbol(normalized)
-  workTitle &&= removeSymbol(workTitle)
-  subTitle &&= removeSymbol(subTitle)
+  title &&= removeSymbol(title)
+  subtitle &&= removeSymbol(subtitle)
 
   const keywords: string[] = []
 
-  if (workTitle) {
-    keywords.push(workTitle)
+  if (title) {
+    keywords.push(title)
   }
 
   if (season) {
@@ -188,7 +188,7 @@ export const buildSearchQuery = ({
         `episode${number}`,
         `ep${number}`,
         `#${number}`,
-        `"${subTitle}"`,
+        `"${subtitle}"`,
       ]
         .flatMap((v) => v || [])
         .join(' OR ')

@@ -6,24 +6,26 @@ import { CHANNEL_IDS_JIKKYO_SYOBOCAL } from '../constants.js'
 
 import { json as syobocalJson } from '../syobocal/index.js'
 
-export const syobocal = async ({
-  title,
-  ep,
-  userAgent,
-}: {
-  title: string
-  ep?: number
-  userAgent?: string
-}) => {
-  const { workTitle, season, episode, subTitle } = ncoParser.extract(title)
-  const epNum = ep ?? episode?.number
+export const syobocal = async (
+  input: {
+    title?: string | null
+    seasonNumber?: number | null
+    episodeNumber?: number | null
+    subtitle?: string | null
+  },
+  options: {
+    userAgent?: string
+  } = {}
+) => {
+  const { title, seasonNumber, episodeNumber, subtitle } = input
+  const { userAgent } = options
 
-  if (!workTitle || epNum == null) {
+  if (!title || episodeNumber == null) {
     return null
   }
 
   const searchWord = removeRomanNum(
-    ncoParser.normalizeAll(workTitle, {
+    ncoParser.normalizeAll(title, {
       adjust: {
         letterCase: 'upper',
       },
@@ -53,23 +55,22 @@ export const syobocal = async ({
   const searchResults: typeof searchResultTitles = []
   const searchResultsPartial: typeof searchResultTitles = []
 
-  const workTitleNormalized = ncoParser.normalize(workTitle, {
+  const workTitleNormalized = ncoParser.normalize(title, {
     remove: {
       bracket: true,
     },
   })
 
   searchResultTitles.forEach((val) => {
-    const { normalized: scNormalized, workTitle: scWorkTitle } =
-      ncoParser.extract(
-        val.Title.replace(/\(第?[2-9](nd|rd|th)?クール\)$/g, '')
-      )
+    const { normalized: scNormalized, title: scTitle } = ncoParser.extract(
+      val.Title.replace(/\(第?[2-9](nd|rd|th)?クール\)$/g, '')
+    )
 
     if (
       // タイトルが一致
-      ncoParser.compare(workTitle, scNormalized) ||
+      ncoParser.compare(title, scNormalized) ||
       // 作品名が一致
-      (scWorkTitle && ncoParser.compare(workTitle, scWorkTitle))
+      (scTitle && ncoParser.compare(title, scTitle))
     ) {
       searchResults.push(val)
 
@@ -98,7 +99,7 @@ export const syobocal = async ({
       ['SubTitles', 'ProgramByCount'],
       {
         TID: searchResultsAll.map((v) => v.TID),
-        Count: epNum,
+        Count: episodeNumber,
         ChID: CHANNEL_IDS_JIKKYO_SYOBOCAL.map((v) => v[1]),
       },
       { userAgent }
@@ -114,13 +115,15 @@ export const syobocal = async ({
     tid = searchResults[0].TID
   } else if (SubTitles) {
     // サブタイトル比較
-    if (subTitle) {
-      const subTitleNormalized = ncoParser.normalizeAll(subTitle)
+    if (subtitle) {
+      const subtitleNormalized = ncoParser.normalizeAll(subtitle)
 
       for (const val of Object.entries(SubTitles)) {
-        const scSubTitleNormalized = ncoParser.normalizeAll(val[1][epNum])
+        const scSubtitleNormalized = ncoParser.normalizeAll(
+          val[1][episodeNumber]
+        )
 
-        if (0.95 <= similarity(subTitleNormalized, scSubTitleNormalized)) {
+        if (0.95 <= similarity(subtitleNormalized, scSubtitleNormalized)) {
           tid = val[0]
 
           break
@@ -137,17 +140,17 @@ export const syobocal = async ({
 
         const {
           normalized: scNormalized,
-          workTitle: scWorkTitle,
+          title: scTitle,
           season: scSeason,
         } = ncoParser.extract(
           val.Title.replace(/\(第?[2-9](nd|rd|th)?クール\)$/g, '')
         )
 
         if (
-          ncoParser.compare(workTitle, scNormalized, false) ||
-          (scWorkTitle &&
-            ncoParser.compare(workTitle, scWorkTitle, false) &&
-            season?.number === scSeason?.number)
+          ncoParser.compare(title, scNormalized, false) ||
+          (scTitle &&
+            ncoParser.compare(title, scTitle, false) &&
+            (seasonNumber ?? null) === (scSeason?.number ?? null))
         ) {
           tid = val.TID
 
@@ -163,8 +166,7 @@ export const syobocal = async ({
 
   return {
     title: searchResultsAll.find((v) => v.TID === tid)!,
-    subTitle: SubTitles?.[tid]?.[epNum] ?? null,
-    subTitleCount: epNum,
+    subtitle: SubTitles?.[tid]?.[episodeNumber] ?? null,
     programs: Object.values(Programs).filter((v) => v.TID === tid),
   }
 }

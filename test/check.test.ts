@@ -92,7 +92,14 @@ describe('check', () => {
     // const title = '杖と剣のウィストリア シーズン1, 第ニ話 不屈のごとく'
     const title = 'SHY 第13話 ヒーローズ・ハイ'
 
-    const result = await ncoApi.searchSyobocal({ title })
+    const extracted = ncoParser.extract(title)
+
+    const result = await ncoApi.searchSyobocal({
+      title: extracted.title,
+      seasonNumber: extracted.season?.number,
+      episodeNumber: extracted.episode?.number,
+      subtitle: extracted.subtitle,
+    })
 
     console.log(result)
 

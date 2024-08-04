@@ -18,7 +18,7 @@ const validateChapters = (
 }
 
 export const search = async (...args: Parameters<typeof buildSearchQuery>) => {
-  const [{ title, ...options }] = args
+  const [{ rawText, ...options }] = args
 
   const response = await niconicoSearch({
     ...buildSearchQuery(...args),
@@ -60,7 +60,7 @@ export const search = async (...args: Parameters<typeof buildSearchQuery>) => {
         if (
           !options?.guest &&
           options?.chapter &&
-          ncoParser.compare(title, matchSplit.groups!.title)
+          ncoParser.compare(rawText, matchSplit.groups!.title)
         ) {
           const chapterNum = Number(matchSplit.groups!.chapter)
 
@@ -77,7 +77,7 @@ export const search = async (...args: Parameters<typeof buildSearchQuery>) => {
           /(^|\s)プレミアム限定動画(\s|$)/i.test(val.tags) &&
           !/(^|\s)プレミアム限定動画（お試し）(\s|$)/i.test(val.tags))
       ) {
-        if (!options?.guest && ncoParser.compare(title, val.title)) {
+        if (!options?.guest && ncoParser.compare(rawText, val.title)) {
           contents.normal.push(val)
         }
 
@@ -85,7 +85,7 @@ export const search = async (...args: Parameters<typeof buildSearchQuery>) => {
       }
 
       // 通常
-      if (ncoParser.compare(title, val.title)) {
+      if (ncoParser.compare(rawText, val.title)) {
         contents.normal.push(val)
 
         continue
@@ -96,7 +96,7 @@ export const search = async (...args: Parameters<typeof buildSearchQuery>) => {
         val.tags &&
         /(^|\s)(コメント専用動画|SZBH方式)(\s|$)/i.test(val.tags)
       ) {
-        if (options?.szbh && ncoParser.compare(title, val.title)) {
+        if (options?.szbh && ncoParser.compare(rawText, val.title)) {
           contents.szbh.push(val)
         }
 
