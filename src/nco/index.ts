@@ -1,1 +1,1 @@
-export * from './ai/index.js'
+export * as ai from './ai/index.js'
