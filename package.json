@@ -67,6 +67,11 @@
       "import": "./dist/jikkyo/*.js",
       "default": "./dist/jikkyo/*.js"
     },
+    "./nco/*": {
+      "types": "./dist/nco/*.d.ts",
+      "import": "./dist/nco/*.js",
+      "default": "./dist/nco/*.js"
+    },
     "./niconico/*": {
       "types": "./dist/niconico/*.d.ts",
       "import": "./dist/niconico/*.js",
@@ -106,7 +111,7 @@
     "glob": "^11.0.0",
     "jest": "^29.7.0",
     "rimraf": "^6.0.1",
-    "ts-jest": "^29.2.3",
+    "ts-jest": "^29.2.4",
     "typescript": "^5.5.4",
     "utility-types": "^3.11.0"
   }

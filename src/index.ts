@@ -1,3 +1,4 @@
+import * as nco from './nco/index.js'
 import { search } from './search/index.js'
 import { syobocal as searchSyobocal } from './search/syobocal.js'
 import * as niconico from './niconico/index.js'
@@ -10,6 +11,7 @@ import * as fod from './fod/index.js'
 import * as unext from './unext/index.js'
 
 export const ncoApi = {
+  nco,
   search,
   searchSyobocal,
   niconico,
