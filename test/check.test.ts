@@ -90,7 +90,8 @@ describe('check', () => {
     // const title =
     //   '新米オッサン冒険者、最強パーティに死ぬほど鍛えられて無敵になる。 第2話'
     // const title = '杖と剣のウィストリア シーズン1, 第ニ話 不屈のごとく'
-    const title = 'SHY 第13話 ヒーローズ・ハイ'
+    // const title = 'SHY 第13話 ヒーローズ・ハイ'
+    const title = '僕の心のヤバイやつ 2期 karte13 僕らは探している'
 
     const extracted = ncoParser.extract(title)
 
@@ -101,7 +102,7 @@ describe('check', () => {
       subtitle: extracted.subtitle,
     })
 
-    console.log(result)
+    console.log('result:', result)
 
     expect(!!result).toBe(true)
   }, 10000)

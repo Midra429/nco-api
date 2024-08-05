@@ -6,6 +6,10 @@ import { CHANNEL_IDS_JIKKYO_SYOBOCAL } from '../constants.js'
 
 import { json as syobocalJson } from '../syobocal/index.js'
 
+const normalizeScTitle = (title: string) => {
+  return title.replace(/\(第?[2-9](nd|rd|th)?クール\)$/g, '')
+}
+
 export const syobocal = async (
   input: {
     title?: string | null
@@ -63,7 +67,7 @@ export const syobocal = async (
 
   searchResultTitles.forEach((val) => {
     const { normalized: scNormalized, title: scTitle } = ncoParser.extract(
-      val.Title.replace(/\(第?[2-9](nd|rd|th)?クール\)$/g, '')
+      normalizeScTitle(val.Title)
     )
 
     if (
@@ -142,15 +146,12 @@ export const syobocal = async (
           normalized: scNormalized,
           title: scTitle,
           season: scSeason,
-        } = ncoParser.extract(
-          val.Title.replace(/\(第?[2-9](nd|rd|th)?クール\)$/g, '')
-        )
+        } = ncoParser.extract(normalizeScTitle(val.Title))
 
         if (
-          ncoParser.compare(title, scNormalized, false) ||
-          (scTitle &&
-            ncoParser.compare(title, scTitle, false) &&
-            (seasonNumber ?? null) === (scSeason?.number ?? null))
+          (ncoParser.compare(title, scNormalized, false) ||
+            (scTitle && ncoParser.compare(title, scTitle, false))) &&
+          (seasonNumber ?? null) === (scSeason?.number ?? null)
         ) {
           tid = val.TID
 
