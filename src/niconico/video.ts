@@ -28,7 +28,6 @@ export const video = async (
   if (/^[a-z]{2}\d+$/.test(contentId)) {
     const url = new URL(contentId, API_BASE_URL)
 
-    url.searchParams.set('rp', 'watch')
     url.searchParams.set('responseType', 'json')
 
     // const time = Date.now().toString()
