@@ -3,17 +3,27 @@ export type VideoResponse = VideoResponseOk | VideoResponseError
 export type VideoResponseOk = {
   meta: {
     status: 200
+    code: string
   }
-  data: VideoData
+  data: {
+    metadata: unknown
+    googleTagManager: unknown
+    response: VideoData
+  }
 }
 
 export type VideoResponseError = {
   meta: {
     status: number
-    errorCode: string
+    code: string
   }
   data: {
-    reasonCode: string
+    metadata: unknown
+    response: {
+      statusCode: number
+      errorCode: string
+      reasonCode: string
+    }
   }
 }
 
