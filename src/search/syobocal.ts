@@ -149,8 +149,8 @@ export const syobocal = async (
         } = ncoParser.extract(normalizeScTitle(val.Title))
 
         if (
-          (ncoParser.compare(title, scNormalized, false) ||
-            (scTitle && ncoParser.compare(title, scTitle, false))) &&
+          (ncoParser.compare(title, scNormalized, true) ||
+            (scTitle && ncoParser.compare(title, scTitle, true))) &&
           (seasonNumber ?? null) === (scSeason?.number ?? null)
         ) {
           tid = val.TID
