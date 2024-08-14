@@ -165,15 +165,17 @@ export const buildSearchQuery = ({
     keywords.push(
       [
         `${number}期`,
-        `${kansuji}期`,
+        kansuji && `${kansuji}期`,
         `第${number}シリーズ`,
-        `第${kansuji}シリーズ`,
+        kansuji && `第${kansuji}シリーズ`,
         `第${number}シーズン`,
-        `第${kansuji}シーズン`,
+        kansuji && `第${kansuji}シーズン`,
         `シーズン${number}`,
         `season${number}`,
         `"${number}${['st', 'nd', 'rd'][number - 1] ?? 'th'} season"`,
-      ].join(' OR ')
+      ]
+        .flatMap((v) => v || [])
+        .join(' OR ')
     )
   }
 
@@ -183,12 +185,12 @@ export const buildSearchQuery = ({
     keywords.push(
       [
         `${number}話`,
-        `${kansuji}話`,
+        kansuji && `${kansuji}話`,
         `エピソード${number}`,
         `episode${number}`,
         `ep${number}`,
         `#${number}`,
-        `"${subtitle}"`,
+        subtitle && `"${subtitle}"`,
       ]
         .flatMap((v) => v || [])
         .join(' OR ')
