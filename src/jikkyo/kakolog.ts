@@ -56,7 +56,7 @@ export const kakolog = async <
     const headers = new Headers()
 
     if (options?.userAgent) {
-      headers.set('User-Agent', options.userAgent)
+      headers.set('X-User-Agent', options.userAgent)
     }
 
     try {

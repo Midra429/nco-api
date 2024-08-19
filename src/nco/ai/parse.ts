@@ -10,8 +10,7 @@ export const parse = async (
     const response = await fetch(API_BASE_URL, {
       method: 'POST',
       headers: {
-        'User-Agent': userAgent,
-        'X-NCO-Version': userAgent,
+        'X-User-Agent': userAgent,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ input }),

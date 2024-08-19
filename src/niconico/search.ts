@@ -58,11 +58,7 @@ export const search = async <FieldKey extends SearchQueryFieldKey = never>(
   }
 
   try {
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent': query._context,
-      },
-    })
+    const response = await fetch(url)
     const json: SearchResponse<FieldKey> = await response.json()
 
     if (!isResponseOk(json)) {

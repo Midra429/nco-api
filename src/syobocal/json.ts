@@ -26,7 +26,7 @@ export const json = async <Command extends SyoboCalRequestCommand>(
   const headers = new Headers()
 
   if (options?.userAgent) {
-    headers.set('User-Agent', options.userAgent)
+    headers.set('X-User-Agent', options.userAgent)
   }
 
   try {
