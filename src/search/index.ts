@@ -20,8 +20,14 @@ const validateChapters = (
 export const search = async (...args: Parameters<typeof buildSearchQuery>) => {
   const [{ rawText, ...options }] = args
 
+  const searchQuery = buildSearchQuery(...args)
+
+  if (!searchQuery.jsonFilter) {
+    return null
+  }
+
   const response = await niconicoSearch({
-    ...buildSearchQuery(...args),
+    ...searchQuery,
     fields: [
       'contentId',
       'title',
@@ -41,7 +47,7 @@ export const search = async (...args: Parameters<typeof buildSearchQuery>) => {
   }
 
   const contents: {
-    [key in 'normal' | 'chapter' | 'szbh']: typeof response.data
+    [key in 'normal' | 'szbh' | 'chapter']: typeof response.data
   } = {
     normal: [],
     chapter: [],

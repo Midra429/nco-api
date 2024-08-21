@@ -11,21 +11,26 @@ export type BuildSearchQueryOptions = {
   duration?: number
   /** 未ログイン */
   guest?: boolean
-  /** dアニメストア・分割 (ログイン必須) */
-  chapter?: boolean
+  /** 通常 / dアニメストア */
+  normal?: boolean
   /** コメント専用動画 */
   szbh?: boolean
+  /** dアニメストア・分割 (ログイン必須) */
+  chapter?: boolean
   /** User-Agent */
   userAgent?: string
 }
 
 /**
- * JSONフィルター (通常)
+ * JSONフィルター (通常 / dアニメストア)
  */
 const getJsonFilterNormal = ({
   duration,
   guest,
-}: BuildSearchQueryOptions): SearchQueryJsonFilter => {
+  normal,
+}: BuildSearchQueryOptions): SearchQueryJsonFilter | null => {
+  if (!normal) return null
+
   const andFilters: SearchQueryJsonFilter[] = [
     {
       type: 'equal',
