@@ -235,7 +235,7 @@ export const buildSearchQuery = ({
     targets: ['title'],
     jsonFilter,
     _sort: '-startTime',
-    _limit: 20,
+    _limit: 30,
     _context: options.userAgent || 'nco-api',
   }
 }
