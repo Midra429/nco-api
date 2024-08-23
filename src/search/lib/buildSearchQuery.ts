@@ -165,39 +165,45 @@ export const buildSearchQuery = ({
   }
 
   if (season) {
-    const { number, kansuji } = season
+    const { number, kansuji, text } = season
 
     keywords.push(
       [
-        `${number}期`,
-        kansuji && `${kansuji}期`,
-        `第${number}シリーズ`,
-        kansuji && `第${kansuji}シリーズ`,
-        `第${number}シーズン`,
-        kansuji && `第${kansuji}シーズン`,
-        `シーズン${number}`,
-        `season${number}`,
-        `"${number}${['st', 'nd', 'rd'][number - 1] ?? 'th'} season"`,
+        ...new Set([
+          `${number}期`,
+          kansuji && `${kansuji}期`,
+          `第${number}シリーズ`,
+          kansuji && `第${kansuji}シリーズ`,
+          `第${number}シーズン`,
+          kansuji && `第${kansuji}シーズン`,
+          `シーズン${number}`,
+          `season${number}`,
+          `"${number}${['st', 'nd', 'rd'][number - 1] ?? 'th'} season"`,
+          text.includes(' ') ? `"${text}"` : text,
+        ]),
       ]
-        .flatMap((v) => v || [])
+        .filter(Boolean)
         .join(' OR ')
     )
   }
 
   if (episode) {
-    const { number, kansuji } = episode
+    const { text, number, kansuji } = episode
 
     keywords.push(
       [
-        `${number}話`,
-        kansuji && `${kansuji}話`,
-        `エピソード${number}`,
-        `episode${number}`,
-        `ep${number}`,
-        `#${number}`,
-        subtitle && `"${subtitle}"`,
+        ...new Set([
+          `${number}話`,
+          kansuji && `${kansuji}話`,
+          `エピソード${number}`,
+          `episode${number}`,
+          `ep${number}`,
+          `#${number}`,
+          text.includes(' ') ? `"${text}"` : text,
+          subtitle && `"${subtitle}"`,
+        ]),
       ]
-        .flatMap((v) => v || [])
+        .filter(Boolean)
         .join(' OR ')
     )
   }
@@ -211,7 +217,7 @@ export const buildSearchQuery = ({
     getJsonFilterNormal(options),
     getJsonFilterSzbh(options),
     getJsonFilterChapter(options),
-  ].flatMap((v) => v || [])
+  ].filter((v) => v !== null)
 
   /**
    * JSONフィルター
