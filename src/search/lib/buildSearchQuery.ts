@@ -164,48 +164,43 @@ export const buildSearchQuery = ({
     keywords.push(title)
   }
 
-  if (season) {
-    const { number, kansuji, text } = season
+  // if (season) {
+  //   const { number, kansuji, text } = season
 
-    keywords.push(
-      [
-        ...new Set([
-          `${number}期`,
-          kansuji && `${kansuji}期`,
-          `第${number}シリーズ`,
-          kansuji && `第${kansuji}シリーズ`,
-          `第${number}シーズン`,
-          kansuji && `第${kansuji}シーズン`,
-          `シーズン${number}`,
-          `season${number}`,
-          `"${number}${['st', 'nd', 'rd'][number - 1] ?? 'th'} season"`,
-          text.includes(' ') ? `"${text}"` : text,
-        ]),
-      ]
-        .filter(Boolean)
-        .join(' OR ')
-    )
-  }
+  //   const seasonKeywords = [
+  //     `${number}期`,
+  //     kansuji && `${kansuji}期`,
+  //     `第${number}シリーズ`,
+  //     kansuji && `第${kansuji}シリーズ`,
+  //     `第${number}シーズン`,
+  //     kansuji && `第${kansuji}シーズン`,
+  //     `シーズン${number}`,
+  //     `season${number}`,
+  //     `"${number}${['st', 'nd', 'rd'][number - 1] ?? 'th'} season"`,
+  //   ]
+
+  //   if (!/期|シリーズ|シーズン|season/.test(text)) {
+  //     seasonKeywords.push(text.includes(' ') ? `"${text}"` : text)
+  //   }
+
+  //   keywords.push([...new Set(seasonKeywords)].filter(Boolean).join(' OR '))
+  // }
 
   if (episode) {
     const { text, number, kansuji } = episode
 
-    keywords.push(
-      [
-        ...new Set([
-          `${number}話`,
-          kansuji && `${kansuji}話`,
-          `エピソード${number}`,
-          `episode${number}`,
-          `ep${number}`,
-          `#${number}`,
-          text.includes(' ') ? `"${text}"` : text,
-          subtitle && `"${subtitle}"`,
-        ]),
-      ]
-        .filter(Boolean)
-        .join(' OR ')
-    )
+    const episodeKeywords = [
+      `${number}話`,
+      kansuji && `${kansuji}話`,
+      `エピソード${number}`,
+      `episode${number}`,
+      `ep${number}`,
+      `#${number}`,
+      text.includes(' ') ? `"${text}"` : text,
+      // subtitle && `"${subtitle}"`,
+    ]
+
+    keywords.push([...new Set(episodeKeywords)].filter(Boolean).join(' OR '))
   }
 
   /**
@@ -235,7 +230,7 @@ export const buildSearchQuery = ({
     targets: ['title'],
     jsonFilter,
     _sort: '-startTime',
-    _limit: 30,
+    _limit: 50,
     _context: options.userAgent || 'nco-api',
   }
 }
