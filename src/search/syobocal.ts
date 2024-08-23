@@ -24,12 +24,18 @@ export const syobocal = async (
   const { title, seasonNumber, episodeNumber, subtitle } = input
   const { userAgent } = options
 
-  if (!title || episodeNumber == null) {
+  // "恋する小惑星（アステロイド）" -> "恋する小惑星"
+  const workTitle = title?.replace(
+    /^(\S+)\s*[\(（][\u30a0-\u30ff]+[\)）]$/,
+    '$1'
+  )
+
+  if (!title || !workTitle || episodeNumber == null) {
     return null
   }
 
   const searchWord = removeRomanNum(
-    ncoParser.normalizeAll(title, {
+    ncoParser.normalizeAll(workTitle, {
       adjust: {
         letterCase: 'upper',
       },
@@ -59,7 +65,7 @@ export const syobocal = async (
   const searchResults: typeof searchResultTitles = []
   const searchResultsPartial: typeof searchResultTitles = []
 
-  const workTitleNormalized = ncoParser.normalize(title, {
+  const workTitleNormalized = ncoParser.normalize(workTitle, {
     remove: {
       bracket: true,
     },
@@ -73,8 +79,11 @@ export const syobocal = async (
     if (
       // タイトルが一致
       ncoParser.compare(title, scNormalized) ||
+      ncoParser.compare(workTitle, scNormalized) ||
       // 作品名が一致
-      (scTitle && ncoParser.compare(title, scTitle))
+      (scTitle &&
+        (ncoParser.compare(title, scTitle) ||
+          ncoParser.compare(workTitle, scTitle)))
     ) {
       searchResults.push(val)
 
@@ -149,8 +158,14 @@ export const syobocal = async (
         } = ncoParser.extract(normalizeScTitle(val.Title))
 
         if (
+          // タイトルが一致
           (ncoParser.compare(title, scNormalized, true) ||
-            (scTitle && ncoParser.compare(title, scTitle, true))) &&
+            ncoParser.compare(workTitle, scNormalized, true) ||
+            // 作品名が一致
+            (!!scTitle &&
+              (ncoParser.compare(title, scTitle, true) ||
+                ncoParser.compare(workTitle, scTitle, true)))) &&
+          // シーズンが一致
           (seasonNumber ?? null) === (scSeason?.number ?? null)
         ) {
           tid = val.TID
