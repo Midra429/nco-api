@@ -6,6 +6,8 @@ import type {
 import { ncoParser } from '@midra/nco-parser'
 import { symbol as removeSymbol } from '@midra/nco-parser/normalize/lib/remove/symbol'
 
+import { zeroPadding } from '../../utils/zeroPadding.js'
+
 export type BuildSearchQueryOptions = {
   /** 動画の長さ */
   duration?: number
@@ -196,6 +198,7 @@ export const buildSearchQuery = ({
       `episode${number}`,
       `ep${number}`,
       `#${number}`,
+      `#${zeroPadding(number, 2)}`,
       text.includes(' ') ? `"${text}"` : text,
       // subtitle && `"${subtitle}"`,
     ]
