@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@midra/nco-parser':
-        specifier: ^1.0.14
-        version: 1.0.14
+        specifier: ^1.0.15
+        version: 1.0.15
     devDependencies:
       '@jest/globals':
         specifier: ^29.7.0
@@ -315,8 +315,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@midra/nco-parser@1.0.14':
-    resolution: {integrity: sha512-l006Gd1Uh1j3EdeYJUTZ5PtBPWF5SjkZb+NqiObCxZemNuD+eKrwSh5C7Jahv7KUn43n/tmHkFeKWFpweklWRg==}
+  '@midra/nco-parser@1.0.15':
+    resolution: {integrity: sha512-k3eI1VzUpSdGomS00xZF5ECgh41Nz4fYnbQ764JhymC2b+NcI5BHQsr9Ko6BBBwtXgMEJszElnG616ebU2msgA==}
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -538,8 +538,8 @@ packages:
     resolution: {integrity: sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==}
     engines: {node: '>=10'}
 
-  caniuse-lite@1.0.30001651:
-    resolution: {integrity: sha512-9Cf+Xv1jJNe1xPZLGuUXLNkE1BoDkqRqYyFJ9TDYSqhduqA4hu4oR9HluGoWYQC/aj8WHjsGVV+bwkh0+tegRg==}
+  caniuse-lite@1.0.30001653:
+    resolution: {integrity: sha512-XGWQVB8wFQ2+9NZwZ10GxTYC5hk0Fa+q8cSkr0tgvMhYhMHP/QC+WTgrePMDBWiWc/pV+1ik82Al20XOK25Gcw==}
 
   chalk@2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
@@ -2239,7 +2239,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@midra/nco-parser@1.0.14':
+  '@midra/nco-parser@1.0.15':
     dependencies:
       '@geolonia/japanese-numeral': 1.0.2
 
@@ -2476,7 +2476,7 @@ snapshots:
 
   browserslist@4.23.3:
     dependencies:
-      caniuse-lite: 1.0.30001651
+      caniuse-lite: 1.0.30001653
       electron-to-chromium: 1.5.13
       node-releases: 2.0.18
       update-browserslist-db: 1.1.0(browserslist@4.23.3)
@@ -2509,7 +2509,7 @@ snapshots:
 
   camelcase@6.3.0: {}
 
-  caniuse-lite@1.0.30001651: {}
+  caniuse-lite@1.0.30001653: {}
 
   chalk@2.4.2:
     dependencies:
