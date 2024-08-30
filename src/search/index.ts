@@ -64,7 +64,7 @@ export const search = async (...args: Parameters<typeof buildSearchQuery>) => {
       // dアニメストア・分割 (ログイン必須)
       if (val.channelId === DANIME_CHANNEL_ID && matchSplit) {
         if (
-          !options?.guest &&
+          // !options?.guest &&
           options?.chapter &&
           ncoParser.compare(rawText, matchSplit.groups!.title)
         ) {
@@ -76,19 +76,19 @@ export const search = async (...args: Parameters<typeof buildSearchQuery>) => {
         continue
       }
 
-      // 有料 (ログイン必須)
-      if (
-        val.channelId === DANIME_CHANNEL_ID ||
-        (val.tags &&
-          /(^|\s)プレミアム限定動画(\s|$)/i.test(val.tags) &&
-          !/(^|\s)プレミアム限定動画（お試し）(\s|$)/i.test(val.tags))
-      ) {
-        if (!options?.guest && ncoParser.compare(rawText, val.title)) {
-          contents.normal.push(val)
-        }
+      // // 有料 (ログイン必須)
+      // if (
+      //   val.channelId === DANIME_CHANNEL_ID ||
+      //   (val.tags &&
+      //     /(^|\s)プレミアム限定動画(\s|$)/i.test(val.tags) &&
+      //     !/(^|\s)プレミアム限定動画（お試し）(\s|$)/i.test(val.tags))
+      // ) {
+      //   if (!options?.guest && ncoParser.compare(rawText, val.title)) {
+      //     contents.normal.push(val)
+      //   }
 
-        continue
-      }
+      //   continue
+      // }
 
       // 通常
       if (ncoParser.compare(rawText, val.title)) {

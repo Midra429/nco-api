@@ -28,7 +28,7 @@ export type BuildSearchQueryOptions = {
  */
 const getJsonFilterNormal = ({
   duration,
-  guest,
+  // guest,
   normal,
 }: BuildSearchQueryOptions): SearchQueryJsonFilter | null => {
   if (!normal) return null
@@ -52,16 +52,16 @@ const getJsonFilterNormal = ({
     })
   }
 
-  if (guest) {
-    andFilters.push({
-      type: 'not',
-      filter: {
-        type: 'equal',
-        field: 'tagsExact',
-        value: 'dアニメストア',
-      },
-    })
-  }
+  // if (guest) {
+  //   andFilters.push({
+  //     type: 'not',
+  //     filter: {
+  //       type: 'equal',
+  //       field: 'tagsExact',
+  //       value: 'dアニメストア',
+  //     },
+  //   })
+  // }
 
   return 1 < andFilters.length
     ? {
@@ -121,10 +121,10 @@ const getJsonFilterSzbh = ({
  * JSONフィルター (dアニメストア・分割)
  */
 const getJsonFilterChapter = ({
-  guest,
+  // guest,
   chapter,
 }: BuildSearchQueryOptions): SearchQueryJsonFilter | null => {
-  if (guest || !chapter) return null
+  if (!chapter) return null
 
   return {
     type: 'and',
