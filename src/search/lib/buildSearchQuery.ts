@@ -12,7 +12,7 @@ export type BuildSearchQueryOptions = {
   /** 動画の長さ */
   duration?: number
   /** 未ログイン */
-  guest?: boolean
+  // guest?: boolean
   /** 通常 / dアニメストア */
   normal?: boolean
   /** コメント専用動画 */

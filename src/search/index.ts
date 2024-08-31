@@ -47,11 +47,12 @@ export const search = async (...args: Parameters<typeof buildSearchQuery>) => {
   }
 
   const contents: {
-    [key in 'normal' | 'szbh' | 'chapter']: typeof response.data
+    [key in 'normal' | 'danime' | 'szbh' | 'chapter']: typeof response.data
   } = {
     normal: [],
-    chapter: [],
+    danime: [],
     szbh: [],
+    chapter: [],
   }
 
   // 仕分け作業
@@ -89,6 +90,15 @@ export const search = async (...args: Parameters<typeof buildSearchQuery>) => {
 
       //   continue
       // }
+
+      // dアニメストア
+      if (val.channelId === DANIME_CHANNEL_ID) {
+        if (ncoParser.compare(rawText, val.title)) {
+          contents.danime.push(val)
+        }
+
+        continue
+      }
 
       // 通常
       if (ncoParser.compare(rawText, val.title)) {
