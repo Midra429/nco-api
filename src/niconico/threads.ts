@@ -25,7 +25,9 @@ export const threads = async (
     const body: RequestBody = {
       params: {
         ...nvComment.params,
-        targets: nvComment.params.targets.filter((v) => v.fork !== 'easy'),
+        targets: nvComment.params.targets.filter(
+          (v) => !v.fork.includes('easy')
+        ),
       },
       threadKey: nvComment.threadKey,
       additionals: additionals ?? {},
