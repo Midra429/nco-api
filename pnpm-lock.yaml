@@ -12,8 +12,8 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2
       '@midra/nco-parser':
-        specifier: ^1.0.17
-        version: 1.0.17
+        specifier: ^1.0.18
+        version: 1.0.18
     devDependencies:
       '@jest/globals':
         specifier: ^29.7.0
@@ -318,8 +318,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@midra/nco-parser@1.0.17':
-    resolution: {integrity: sha512-nzHhWDwgvtfApwhoa4iqwAzFcFRjEZdhc7v5b8eH1lLbBOUg13BtqCMxk95otAnPe1Y0Wgazx8h6CPMNUlKyNQ==}
+  '@midra/nco-parser@1.0.18':
+    resolution: {integrity: sha512-W93O91md+NmrBj8X+jCEzcYR17i+uT/UkvZj3CxGyiQWAZERCU2hMAxzIgRQyxo/BmfDqyJfk9wDKibHHAN+5A==}
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -2242,7 +2242,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@midra/nco-parser@1.0.17':
+  '@midra/nco-parser@1.0.18':
     dependencies:
       '@geolonia/japanese-numeral': 1.0.2
 

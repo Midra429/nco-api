@@ -69,7 +69,7 @@ export const search = async (args: BuildSearchQueryArgs) => {
         if (
           // !options?.guest &&
           options?.chapter &&
-          ncoParser.compare(rawText, matchSplit.groups!.title)
+          ncoParser.compare(rawText, matchSplit.groups!.title, true)
         ) {
           const chapterNum = Number(matchSplit.groups!.chapter)
 
@@ -79,23 +79,9 @@ export const search = async (args: BuildSearchQueryArgs) => {
         continue
       }
 
-      // // 有料 (ログイン必須)
-      // if (
-      //   val.channelId === DANIME_CHANNEL_ID ||
-      //   (val.tags &&
-      //     /(^|\s)プレミアム限定動画(\s|$)/i.test(val.tags) &&
-      //     !/(^|\s)プレミアム限定動画（お試し）(\s|$)/i.test(val.tags))
-      // ) {
-      //   if (!options?.guest && ncoParser.compare(rawText, val.title)) {
-      //     contents.normal.push(val)
-      //   }
-
-      //   continue
-      // }
-
       // dアニメストア
       if (val.channelId === DANIME_CHANNEL_ID) {
-        if (ncoParser.compare(rawText, val.title)) {
+        if (ncoParser.compare(rawText, val.title, true)) {
           contents.danime.push(val)
         }
 
@@ -103,7 +89,7 @@ export const search = async (args: BuildSearchQueryArgs) => {
       }
 
       // 通常
-      if (ncoParser.compare(rawText, val.title)) {
+      if (ncoParser.compare(rawText, val.title, true)) {
         contents.normal.push(val)
 
         continue
@@ -114,7 +100,7 @@ export const search = async (args: BuildSearchQueryArgs) => {
         val.tags &&
         /(^|\s)(コメント専用動画|SZBH方式)(\s|$)/i.test(val.tags)
       ) {
-        if (options?.szbh && ncoParser.compare(rawText, val.title)) {
+        if (options?.szbh && ncoParser.compare(rawText, val.title, true)) {
           contents.szbh.push(val)
         }
 
