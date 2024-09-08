@@ -1,4 +1,5 @@
 import type { SearchData } from '../types/niconico/search.js'
+import type { BuildSearchQueryArgs } from './lib/buildSearchQuery.js'
 
 import { DANIME_CHANNEL_ID } from '../constants.js'
 import { ncoParser } from '@midra/nco-parser'
@@ -17,10 +18,11 @@ const validateChapters = (
   )
 }
 
-export const search = async (...args: Parameters<typeof buildSearchQuery>) => {
-  const [{ rawText, ...options }] = args
+export const search = async (args: BuildSearchQueryArgs) => {
+  const { input, options } = args
+  const { rawText } = input
 
-  const searchQuery = buildSearchQuery(...args)
+  const searchQuery = buildSearchQuery(args)
 
   if (!searchQuery.jsonFilter) {
     return null

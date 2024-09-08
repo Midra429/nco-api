@@ -3,16 +3,23 @@ import type {
   SearchQueryJsonFilter,
 } from '../../types/niconico/search.js'
 
+import { number2kanji } from '@geolonia/japanese-numeral'
 import { ncoParser } from '@midra/nco-parser'
-import { symbol as removeSymbol } from '@midra/nco-parser/normalize/lib/remove/symbol'
 
 import { zeroPadding } from '../../utils/zeroPadding.js'
 
+export type BuildSearchQueryInput = {
+  rawText: string
+  title?: string | null
+  seasonText?: string | null
+  seasonNumber?: number | null
+  episodeText?: string | null
+  episodeNumber?: number | null
+  subtitle?: string | null
+  duration: number
+}
+
 export type BuildSearchQueryOptions = {
-  /** 動画の長さ */
-  duration?: number
-  /** 未ログイン */
-  // guest?: boolean
   /** 通常 / dアニメストア */
   normal?: boolean
   /** コメント専用動画 */
@@ -23,15 +30,19 @@ export type BuildSearchQueryOptions = {
   userAgent?: string
 }
 
+export type BuildSearchQueryArgs = {
+  input: BuildSearchQueryInput
+  options: BuildSearchQueryOptions
+}
+
 /**
  * JSONフィルター (通常 / dアニメストア)
  */
 const getJsonFilterNormal = ({
-  duration,
-  // guest,
-  normal,
-}: BuildSearchQueryOptions): SearchQueryJsonFilter | null => {
-  if (!normal) return null
+  input,
+  options,
+}: BuildSearchQueryArgs): SearchQueryJsonFilter | null => {
+  if (!options.normal) return null
 
   const andFilters: SearchQueryJsonFilter[] = [
     {
@@ -41,27 +52,16 @@ const getJsonFilterNormal = ({
     },
   ]
 
-  if (duration) {
+  if (input.duration) {
     andFilters.push({
       type: 'range',
       field: 'lengthSeconds',
-      from: duration - 15,
-      to: duration + 15,
+      from: input.duration - 15,
+      to: input.duration + 15,
       include_lower: true,
       include_upper: true,
     })
   }
-
-  // if (guest) {
-  //   andFilters.push({
-  //     type: 'not',
-  //     filter: {
-  //       type: 'equal',
-  //       field: 'tagsExact',
-  //       value: 'dアニメストア',
-  //     },
-  //   })
-  // }
 
   return 1 < andFilters.length
     ? {
@@ -75,10 +75,10 @@ const getJsonFilterNormal = ({
  * JSONフィルター (コメント専用動画)
  */
 const getJsonFilterSzbh = ({
-  duration,
-  szbh,
-}: BuildSearchQueryOptions): SearchQueryJsonFilter | null => {
-  if (!szbh) return null
+  input,
+  options,
+}: BuildSearchQueryArgs): SearchQueryJsonFilter | null => {
+  if (!options.szbh) return null
 
   const andFilters: SearchQueryJsonFilter[] = [
     {
@@ -98,12 +98,12 @@ const getJsonFilterSzbh = ({
     },
   ]
 
-  if (duration) {
+  if (input.duration) {
     andFilters.push({
       type: 'range',
       field: 'lengthSeconds',
-      from: duration - 5,
-      to: duration + 65,
+      from: input.duration - 5,
+      to: input.duration + 65,
       include_lower: true,
       include_upper: true,
     })
@@ -121,10 +121,9 @@ const getJsonFilterSzbh = ({
  * JSONフィルター (dアニメストア・分割)
  */
 const getJsonFilterChapter = ({
-  // guest,
-  chapter,
-}: BuildSearchQueryOptions): SearchQueryJsonFilter | null => {
-  if (!chapter) return null
+  options,
+}: BuildSearchQueryArgs): SearchQueryJsonFilter | null => {
+  if (!options.chapter) return null
 
   return {
     type: 'and',
@@ -143,22 +142,38 @@ const getJsonFilterChapter = ({
   }
 }
 
-export const buildSearchQuery = ({
-  rawText,
-  ...options
-}: { rawText: string } & BuildSearchQueryOptions): Pick<
+export const buildSearchQuery = (
+  args: BuildSearchQueryArgs
+): Pick<
   SearchQuery,
   'q' | 'targets' | 'jsonFilter' | '_sort' | '_limit' | '_context'
 > => {
-  options.duration &&= Math.round(options.duration)
+  const { input, options } = args
+  let { seasonText, seasonNumber, episodeText, episodeNumber } = input
 
-  const extracted = ncoParser.extract(rawText)
-  const { season, episode } = extracted
-  let { normalized, title, subtitle } = extracted
+  input.duration &&= Math.round(input.duration)
 
-  normalized = removeSymbol(normalized)
-  title &&= removeSymbol(title)
-  subtitle &&= removeSymbol(subtitle)
+  const normalized = ncoParser.normalizeAll(input.rawText, {
+    remove: {
+      space: false,
+    },
+  })
+
+  const title =
+    input.title &&
+    ncoParser.normalizeAll(input.title, {
+      remove: {
+        space: false,
+      },
+    })
+
+  // const subtitle =
+  //   input.subtitle &&
+  //   ncoParser.normalizeAll(input.subtitle, {
+  //     remove: {
+  //       space: false,
+  //     },
+  //   })
 
   const keywords: string[] = []
 
@@ -166,40 +181,44 @@ export const buildSearchQuery = ({
     keywords.push(title)
   }
 
-  // if (season) {
-  //   const { number, kansuji, text } = season
+  // if (seasonText != null && seasonNumber != null) {
+  //   const seasonKansuji =
+  //     Number.isInteger(seasonNumber) && number2kanji(seasonNumber)
 
   //   const seasonKeywords = [
-  //     `${number}期`,
-  //     kansuji && `${kansuji}期`,
-  //     `第${number}シリーズ`,
-  //     kansuji && `第${kansuji}シリーズ`,
-  //     `第${number}シーズン`,
-  //     kansuji && `第${kansuji}シーズン`,
-  //     `シーズン${number}`,
-  //     `season${number}`,
-  //     `"${number}${['st', 'nd', 'rd'][number - 1] ?? 'th'} season"`,
+  //     `${seasonNumber}期`,
+  //     seasonKansuji && `${seasonKansuji}期`,
+  //     `第${seasonNumber}シリーズ`,
+  //     seasonKansuji && `第${seasonKansuji}シリーズ`,
+  //     `第${seasonNumber}シーズン`,
+  //     seasonKansuji && `第${seasonKansuji}シーズン`,
+  //     `シーズン${seasonNumber}`,
+  //     `season${seasonNumber}`,
+  //     `"${seasonNumber}${['st', 'nd', 'rd'][seasonNumber - 1] ?? 'th'} season"`,
   //   ]
 
-  //   if (!/期|シリーズ|シーズン|season/.test(text)) {
-  //     seasonKeywords.push(text.includes(' ') ? `"${text}"` : text)
+  //   if (!/期|シリーズ|シーズン|season/.test(seasonText)) {
+  //     seasonKeywords.push(
+  //       seasonText.includes(' ') ? `"${seasonText}"` : seasonText
+  //     )
   //   }
 
   //   keywords.push([...new Set(seasonKeywords)].filter(Boolean).join(' OR '))
   // }
 
-  if (episode) {
-    const { text, number, kansuji } = episode
+  if (episodeText != null && episodeNumber != null) {
+    const episodeKansuji =
+      Number.isInteger(episodeNumber) && number2kanji(episodeNumber)
 
     const episodeKeywords = [
-      `${number}話`,
-      kansuji && `${kansuji}話`,
-      `エピソード${number}`,
-      `episode${number}`,
-      `ep${number}`,
-      `#${number}`,
-      `#${zeroPadding(number, 2)}`,
-      text.includes(' ') ? `"${text}"` : text,
+      `${episodeNumber}話`,
+      episodeKansuji && `${episodeKansuji}話`,
+      `エピソード${episodeNumber}`,
+      `episode${episodeNumber}`,
+      `ep${episodeNumber}`,
+      `#${episodeNumber}`,
+      `#${zeroPadding(episodeNumber, 2)}`,
+      episodeText.includes(' ') ? `"${episodeText}"` : episodeText,
       // subtitle && `"${subtitle}"`,
     ]
 
@@ -212,9 +231,9 @@ export const buildSearchQuery = ({
   const q: SearchQuery['q'] = keywords.join(' ') || normalized
 
   const orFilters: SearchQueryJsonFilter[] = [
-    getJsonFilterNormal(options),
-    getJsonFilterSzbh(options),
-    getJsonFilterChapter(options),
+    getJsonFilterNormal(args),
+    getJsonFilterSzbh(args),
+    getJsonFilterChapter(args),
   ].filter((v) => v !== null)
 
   /**
