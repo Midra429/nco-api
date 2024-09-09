@@ -11,7 +11,7 @@ import { buildSearchQuery } from './lib/buildSearchQuery.js'
 
 const REGEXP_DANIME_CHAPTER = /^(?<title>.+)Chapter\.(?<chapter>[1-9])$/
 
-const QUERY_FIELDS = [
+const fields = [
   'contentId',
   'title',
   'userId',
@@ -39,66 +39,71 @@ const validateChapters = (
 export const search = async (args: BuildSearchQueryArgs) => {
   const { input, options } = args
 
-  const searchQuery = buildSearchQuery(args)
+  let searchData: NonNullable<
+    Awaited<ReturnType<typeof niconicoSearch<(typeof fields)[number]>>>
+  >['data'] = []
 
-  if (!searchQuery.jsonFilter) {
-    return null
-  }
+  // 1回目
+  const searchQuery1 = buildSearchQuery(args)
 
-  const searchQuery2 = options.normal
-    ? buildSearchQuery({
-        ...args,
-        options: {
-          normal: true,
-        },
-      })
-    : null
-
-  const q2 = options.normal
-    ? ncoParser.normalizeAll(
-        [
-          input.title,
-          input.seasonNumber && 1 < input.seasonNumber && input.seasonText,
-          input.episodeText,
-          input.subtitle,
-        ]
-          .filter(Boolean)
-          .join(' ')
-          .trim() || input.rawText,
-        {
-          remove: {
-            space: false,
-          },
-        }
-      )
-    : null
-
-  const responseData = (
-    await Promise.all([
-      niconicoSearch({
-        ...searchQuery,
-        fields: QUERY_FIELDS,
-      }),
-      searchQuery2 && q2
-        ? niconicoSearch({
-            ...searchQuery2,
-            q: q2,
-            fields: QUERY_FIELDS,
-          })
-        : null,
-    ])
-  )
-    .flatMap((res) => res?.data || [])
-    .filter((val, idx, ary) => {
-      return ary.findIndex((v) => v.contentId === val.contentId) === idx
+  if (searchQuery1.jsonFilter) {
+    const res = await niconicoSearch({
+      ...searchQuery1,
+      fields,
     })
 
-  if (!responseData.length) {
+    if (res?.data) {
+      searchData.push(...res.data)
+    }
+  }
+
+  // 2回目 (通常 / dアニメ)
+  if (!searchData.length && options.normal) {
+    const searchQuery2 = buildSearchQuery({
+      ...args,
+      options: {
+        normal: true,
+      },
+    })
+
+    const q = ncoParser.normalizeAll(
+      [
+        input.title,
+        input.seasonNumber && 1 < input.seasonNumber && input.seasonText,
+        input.episodeText,
+        input.subtitle,
+      ]
+        .filter(Boolean)
+        .join(' ') || input.rawText,
+      {
+        remove: {
+          space: false,
+        },
+      }
+    )
+
+    const res = await niconicoSearch({
+      ...searchQuery2,
+      q,
+      fields,
+    })
+
+    if (res?.data) {
+      searchData.push(...res.data)
+    }
+  }
+
+  // 重複除去
+  searchData = searchData.filter((val, idx, ary) => {
+    return ary.findIndex((v) => v.contentId === val.contentId) === idx
+  })
+
+  if (!searchData.length) {
     return null
   }
 
   const contents: {
-    [key in 'normal' | 'danime' | 'szbh' | 'chapter']: typeof responseData
+    [key in 'normal' | 'danime' | 'szbh' | 'chapter']: typeof searchData
   } = {
     normal: [],
     danime: [],
@@ -107,7 +112,7 @@ export const search = async (args: BuildSearchQueryArgs) => {
   }
 
   // 仕分け作業
-  for (const val of responseData) {
+  for (const val of searchData) {
     if (val.channelId) {
       // dアニメストア・分割 (ログイン必須)
       if (
