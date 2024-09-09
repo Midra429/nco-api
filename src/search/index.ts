@@ -45,22 +45,33 @@ export const search = async (args: BuildSearchQueryArgs) => {
     return null
   }
 
-  const q2 = ncoParser.normalizeAll(
-    [
-      input.title,
-      input.seasonNumber && 1 < input.seasonNumber && input.seasonText,
-      input.episodeText,
-      input.subtitle,
-    ]
-      .filter(Boolean)
-      .join(' ')
-      .trim() || input.rawText,
-    {
-      remove: {
-        space: false,
-      },
-    }
-  )
+  const searchQuery2 = options.normal
+    ? buildSearchQuery({
+        ...args,
+        options: {
+          normal: true,
+        },
+      })
+    : null
+
+  const q2 = options.normal
+    ? ncoParser.normalizeAll(
+        [
+          input.title,
+          input.seasonNumber && 1 < input.seasonNumber && input.seasonText,
+          input.episodeText,
+          input.subtitle,
+        ]
+          .filter(Boolean)
+          .join(' ')
+          .trim() || input.rawText,
+        {
+          remove: {
+            space: false,
+          },
+        }
+      )
+    : null
 
   const responseData = (
     await Promise.all([
@@ -68,11 +79,13 @@ export const search = async (args: BuildSearchQueryArgs) => {
         ...searchQuery,
         fields: QUERY_FIELDS,
       }),
-      niconicoSearch({
-        ...searchQuery,
-        q: q2,
-        fields: QUERY_FIELDS,
-      }),
+      searchQuery2 && q2
+        ? niconicoSearch({
+            ...searchQuery2,
+            q: q2,
+            fields: QUERY_FIELDS,
+          })
+        : null,
     ])
   )
     .flatMap((res) => res?.data || [])
