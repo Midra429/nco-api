@@ -38,13 +38,29 @@ const validateChapters = (
 
 export const search = async (args: BuildSearchQueryArgs) => {
   const { input, options } = args
-  const { rawText } = input
 
   const searchQuery = buildSearchQuery(args)
 
   if (!searchQuery.jsonFilter) {
     return null
   }
+
+  const q2 = ncoParser.normalizeAll(
+    [
+      input.title,
+      input.seasonNumber && 1 < input.seasonNumber && input.seasonText,
+      input.episodeText,
+      input.subtitle,
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .trim() || input.rawText,
+    {
+      remove: {
+        space: false,
+      },
+    }
+  )
 
   const responseData = (
     await Promise.all([
@@ -54,15 +70,15 @@ export const search = async (args: BuildSearchQueryArgs) => {
       }),
       niconicoSearch({
         ...searchQuery,
-        q: ncoParser.normalizeAll(rawText, {
-          remove: {
-            space: false,
-          },
-        }),
+        q: q2,
         fields: QUERY_FIELDS,
       }),
     ])
-  ).flatMap((res) => res?.data || [])
+  )
+    .flatMap((res) => res?.data || [])
+    .filter((val, idx, ary) => {
+      return ary.findIndex((v) => v.contentId === val.contentId) === idx
+    })
 
   if (!responseData.length) {
     return null
@@ -84,13 +100,13 @@ export const search = async (args: BuildSearchQueryArgs) => {
       if (
         val.channelId === DANIME_CHANNEL_ID &&
         REGEXP_DANIME_CHAPTER.test(val.title) &&
-        !REGEXP_DANIME_CHAPTER.test(rawText)
+        !REGEXP_DANIME_CHAPTER.test(input.rawText)
       ) {
         const { groups } = val.title.match(REGEXP_DANIME_CHAPTER)!
 
         if (
           options?.chapter &&
-          ncoParser.compare(rawText, groups!.title, true)
+          ncoParser.compare(input.rawText, groups!.title, true)
         ) {
           const chapterNum = Number(groups!.chapter)
 
@@ -102,7 +118,7 @@ export const search = async (args: BuildSearchQueryArgs) => {
 
       // dアニメストア
       if (val.channelId === DANIME_CHANNEL_ID) {
-        if (ncoParser.compare(rawText, val.title, true)) {
+        if (ncoParser.compare(input.rawText, val.title, true)) {
           contents.danime.push(val)
         }
 
@@ -110,7 +126,7 @@ export const search = async (args: BuildSearchQueryArgs) => {
       }
 
       // 通常
-      if (ncoParser.compare(rawText, val.title, true)) {
+      if (ncoParser.compare(input.rawText, val.title, true)) {
         contents.normal.push(val)
 
         continue
@@ -121,7 +137,10 @@ export const search = async (args: BuildSearchQueryArgs) => {
         val.tags &&
         /(^|\s)(コメント専用動画|SZBH方式)(\s|$)/i.test(val.tags)
       ) {
-        if (options?.szbh && ncoParser.compare(rawText, val.title, true)) {
+        if (
+          options?.szbh &&
+          ncoParser.compare(input.rawText, val.title, true)
+        ) {
           contents.szbh.push(val)
         }
 
