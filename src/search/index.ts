@@ -24,6 +24,10 @@ const fields = [
   'tags',
 ] as const satisfies SearchQueryFieldKey[]
 
+type SearchDataType = NonNullable<
+  Awaited<ReturnType<typeof niconicoSearch<(typeof fields)[number]>>>
+>['data'][number]
+
 const validateChapters = (
   chapters: SearchData<'lengthSeconds'>[],
   duration?: number
@@ -36,74 +40,15 @@ const validateChapters = (
   )
 }
 
-export const search = async (args: BuildSearchQueryArgs) => {
-  const { input, options } = args
-
-  let searchData: NonNullable<
-    Awaited<ReturnType<typeof niconicoSearch<(typeof fields)[number]>>>
-  >['data'] = []
-
-  // 1回目
-  const searchQuery1 = buildSearchQuery(args)
-
-  if (searchQuery1.jsonFilter) {
-    const res = await niconicoSearch({
-      ...searchQuery1,
-      fields,
-    })
-
-    if (res?.data) {
-      searchData.push(...res.data)
-    }
-  }
-
-  // 2回目 (通常 / dアニメ)
-  if (!searchData.length && options.normal) {
-    const searchQuery2 = buildSearchQuery({
-      ...args,
-      options: {
-        normal: true,
-      },
-    })
-
-    const q = ncoParser.normalizeAll(
-      [
-        input.title,
-        input.seasonNumber && 1 < input.seasonNumber && input.seasonText,
-        input.episodeText,
-        input.subtitle,
-      ]
-        .filter(Boolean)
-        .join(' ') || input.rawText,
-      {
-        remove: {
-          space: false,
-        },
-      }
-    )
-
-    const res = await niconicoSearch({
-      ...searchQuery2,
-      q,
-      fields,
-    })
-
-    if (res?.data) {
-      searchData.push(...res.data)
-    }
-  }
-
-  // 重複除去
-  searchData = searchData.filter((val, idx, ary) => {
-    return ary.findIndex((v) => v.contentId === val.contentId) === idx
-  })
-
-  if (!searchData.length) {
-    return null
-  }
-
+const sortingSearchData = ({
+  input,
+  options,
+  data,
+}: BuildSearchQueryArgs & {
+  data: SearchDataType[]
+}) => {
   const contents: {
-    [key in 'normal' | 'danime' | 'szbh' | 'chapter']: typeof searchData
+    [key in 'normal' | 'danime' | 'szbh' | 'chapter']: SearchDataType[]
   } = {
     normal: [],
     danime: [],
@@ -112,7 +57,7 @@ export const search = async (args: BuildSearchQueryArgs) => {
   }
 
   // 仕分け作業
-  for (const val of searchData) {
+  for (const val of data) {
     if (val.channelId) {
       // dアニメストア・分割 (ログイン必須)
       if (
@@ -172,4 +117,75 @@ export const search = async (args: BuildSearchQueryArgs) => {
   }
 
   return contents
+}
+
+export const search = async (args: BuildSearchQueryArgs) => {
+  const { input, options } = args
+
+  let data: SearchDataType[] = []
+
+  // 1回目
+  const searchQuery1 = buildSearchQuery(args)
+
+  if (searchQuery1.jsonFilter) {
+    const res = await niconicoSearch({
+      ...searchQuery1,
+      fields,
+    })
+
+    if (res?.data) {
+      data.push(...res.data)
+    }
+  }
+
+  const sorted1 = sortingSearchData({
+    ...args,
+    data,
+  })
+
+  // 2回目 (通常 / dアニメ)
+  if (!sorted1.normal.length && !sorted1.danime.length && options.normal) {
+    const searchQuery2 = buildSearchQuery({
+      ...args,
+      options: {
+        normal: true,
+      },
+    })
+
+    const q = ncoParser.normalizeAll(
+      [
+        input.title,
+        input.seasonNumber && 1 < input.seasonNumber && input.seasonText,
+        input.episodeText,
+        input.subtitle,
+      ]
+        .filter(Boolean)
+        .join(' ') || input.rawText,
+      {
+        remove: {
+          space: false,
+        },
+      }
+    )
+
+    const res = await niconicoSearch({
+      ...searchQuery2,
+      q,
+      fields,
+    })
+
+    if (res?.data) {
+      data.push(...res.data)
+    }
+  }
+
+  // 重複除去
+  data = data.filter((val, idx, ary) => {
+    return ary.findIndex((v) => v.contentId === val.contentId) === idx
+  })
+
+  return sortingSearchData({
+    ...args,
+    data,
+  })
 }
