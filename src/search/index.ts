@@ -6,6 +6,8 @@ import { ncoParser } from '@midra/nco-parser'
 import { search as niconicoSearch } from '../niconico/index.js'
 import { buildSearchQuery } from './lib/buildSearchQuery.js'
 
+const REGEXP_DANIME_CHAPTER = /^(?<title>.+)Chapter\.(?<chapter>[1-9])$/
+
 const validateChapters = (
   chapters: SearchData<'lengthSeconds'>[],
   duration?: number
@@ -60,18 +62,19 @@ export const search = async (args: BuildSearchQueryArgs) => {
   // 仕分け作業
   for (const val of response.data) {
     if (val.channelId) {
-      const matchSplit = val.title.match(
-        /^(?<title>.+)Chapter\.(?<chapter>[1-9])$/
-      )
-
       // dアニメストア・分割 (ログイン必須)
-      if (val.channelId === DANIME_CHANNEL_ID && matchSplit) {
+      if (
+        val.channelId === DANIME_CHANNEL_ID &&
+        REGEXP_DANIME_CHAPTER.test(val.title) &&
+        !REGEXP_DANIME_CHAPTER.test(rawText)
+      ) {
+        const { groups } = val.title.match(REGEXP_DANIME_CHAPTER)!
+
         if (
-          // !options?.guest &&
           options?.chapter &&
-          ncoParser.compare(rawText, matchSplit.groups!.title, true)
+          ncoParser.compare(rawText, groups!.title, true)
         ) {
-          const chapterNum = Number(matchSplit.groups!.chapter)
+          const chapterNum = Number(groups!.chapter)
 
           contents.chapter[chapterNum - 1] = val
         }
