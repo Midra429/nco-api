@@ -83,7 +83,8 @@ export const syobocal = async (
 
     if (
       // タイトルが一致 (一部)
-      scNormalized.includes(workTitleNormalized)
+      scNormalized.includes(workTitleNormalized) ||
+      workTitleNormalized.includes(scNormalized)
     ) {
       searchResultsPartial.push(val)
 
