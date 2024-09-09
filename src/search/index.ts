@@ -1,4 +1,7 @@
-import type { SearchData } from '../types/niconico/search.js'
+import type {
+  SearchQueryFieldKey,
+  SearchData,
+} from '../types/niconico/search.js'
 import type { BuildSearchQueryArgs } from './lib/buildSearchQuery.js'
 
 import { DANIME_CHANNEL_ID } from '../constants.js'
@@ -7,6 +10,19 @@ import { search as niconicoSearch } from '../niconico/index.js'
 import { buildSearchQuery } from './lib/buildSearchQuery.js'
 
 const REGEXP_DANIME_CHAPTER = /^(?<title>.+)Chapter\.(?<chapter>[1-9])$/
+
+const QUERY_FIELDS = [
+  'contentId',
+  'title',
+  'userId',
+  'channelId',
+  'viewCounter',
+  'lengthSeconds',
+  'thumbnailUrl',
+  'startTime',
+  'commentCounter',
+  'tags',
+] as const satisfies SearchQueryFieldKey[]
 
 const validateChapters = (
   chapters: SearchData<'lengthSeconds'>[],
@@ -30,28 +46,30 @@ export const search = async (args: BuildSearchQueryArgs) => {
     return null
   }
 
-  const response = await niconicoSearch({
-    ...searchQuery,
-    fields: [
-      'contentId',
-      'title',
-      'userId',
-      'channelId',
-      'viewCounter',
-      'lengthSeconds',
-      'thumbnailUrl',
-      'startTime',
-      'commentCounter',
-      'tags',
-    ],
-  })
+  const responseData = (
+    await Promise.all([
+      niconicoSearch({
+        ...searchQuery,
+        fields: QUERY_FIELDS,
+      }),
+      niconicoSearch({
+        ...searchQuery,
+        q: ncoParser.normalizeAll(rawText, {
+          remove: {
+            space: false,
+          },
+        }),
+        fields: QUERY_FIELDS,
+      }),
+    ])
+  ).flatMap((res) => res?.data || [])
 
-  if (!response) {
+  if (!responseData.length) {
     return null
   }
 
   const contents: {
-    [key in 'normal' | 'danime' | 'szbh' | 'chapter']: typeof response.data
+    [key in 'normal' | 'danime' | 'szbh' | 'chapter']: typeof responseData
   } = {
     normal: [],
     danime: [],
@@ -60,7 +78,7 @@ export const search = async (args: BuildSearchQueryArgs) => {
   }
 
   // 仕分け作業
-  for (const val of response.data) {
+  for (const val of responseData) {
     if (val.channelId) {
       // dアニメストア・分割 (ログイン必須)
       if (
