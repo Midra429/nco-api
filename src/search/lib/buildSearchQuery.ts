@@ -20,12 +20,12 @@ export type BuildSearchQueryInput = {
 }
 
 export type BuildSearchQueryOptions = {
-  /** 通常 / dアニメストア */
-  normal?: boolean
-  /** コメント専用動画 */
-  szbh?: boolean
-  /** dアニメストア・分割 (ログイン必須) */
+  /** 公式 / dアニメ */
+  official?: boolean
+  /** dアニメ (分割) */
   chapter?: boolean
+  /** コメント専用 */
+  szbh?: boolean
   /** User-Agent */
   userAgent?: string
 }
@@ -38,11 +38,11 @@ export type BuildSearchQueryArgs = {
 /**
  * JSONフィルター (通常 / dアニメストア)
  */
-const getJsonFilterNormal = ({
+const getJsonFilterOfficial = ({
   input,
   options,
 }: BuildSearchQueryArgs): SearchQueryJsonFilter | null => {
-  if (!options.normal) return null
+  if (!options.official) return null
 
   const andFilters: SearchQueryJsonFilter[] = [
     {
@@ -231,7 +231,7 @@ export const buildSearchQuery = (
   const q: SearchQuery['q'] = keywords.join(' ') || normalized
 
   const orFilters: SearchQueryJsonFilter[] = [
-    getJsonFilterNormal(args),
+    getJsonFilterOfficial(args),
     getJsonFilterSzbh(args),
     getJsonFilterChapter(args),
   ].filter((v) => v !== null)

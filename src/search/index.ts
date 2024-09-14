@@ -48,12 +48,12 @@ const sortingSearchData = ({
   data: SearchDataType[]
 }) => {
   const contents: {
-    [key in 'normal' | 'danime' | 'szbh' | 'chapter']: SearchDataType[]
+    [key in 'official' | 'danime' | 'chapter' | 'szbh']: SearchDataType[]
   } = {
-    normal: [],
+    official: [],
     danime: [],
-    szbh: [],
     chapter: [],
+    szbh: [],
   }
 
   // 仕分け作業
@@ -88,9 +88,9 @@ const sortingSearchData = ({
         continue
       }
 
-      // 通常
+      // 公式
       if (ncoParser.compare(input.rawText, val.title, true)) {
-        contents.normal.push(val)
+        contents.official.push(val)
 
         continue
       }
@@ -143,12 +143,12 @@ export const search = async (args: BuildSearchQueryArgs) => {
     data,
   })
 
-  // 2回目 (通常 / dアニメ)
-  if (!sorted1.normal.length && !sorted1.danime.length && options.normal) {
+  // 2回目 (公式 / dアニメ)
+  if (options.official && !sorted1.official.length && !sorted1.danime.length) {
     const searchQuery2 = buildSearchQuery({
       ...args,
       options: {
-        normal: true,
+        official: true,
       },
     })
 
