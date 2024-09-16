@@ -12,11 +12,6 @@ let $levels: {
   errors: true,
 }
 
-// let $logs: {
-//   level: keyof typeof $levels
-//   data: any[]
-// }[] = []
-
 export const setLoggerName = (name: string) => {
   $name = `[${name}]`
 }
@@ -28,11 +23,6 @@ export const setLoggerLevels = (levels: typeof $levels) => {
 export const logger: Console = {
   // Verbose
   debug(...data: any[]): void {
-    // $logs.push({
-    //   level: 'verbose',
-    //   data,
-    // })
-
     if ($levels.verbose) {
       if ($name) data.unshift($name)
 
@@ -42,11 +32,6 @@ export const logger: Console = {
 
   // Info
   info(...data: any[]): void {
-    // $logs.push({
-    //   level: 'info',
-    //   data,
-    // })
-
     if ($levels.info) {
       if ($name) data.unshift($name)
 
@@ -59,11 +44,6 @@ export const logger: Console = {
 
   // Warnings
   warn(...data: any[]): void {
-    // $logs.push({
-    //   level: 'warnings',
-    //   data,
-    // })
-
     if ($levels.warnings) {
       if ($name) data.unshift($name)
 
@@ -73,11 +53,6 @@ export const logger: Console = {
 
   // Errors
   error(...data: any[]): void {
-    // $logs.push({
-    //   level: 'errors',
-    //   data,
-    // })
-
     if ($levels.errors) {
       if ($name) data.unshift($name)
 
@@ -101,3 +76,5 @@ export const logger: Console = {
   timeStamp: console.timeStamp,
   trace: console.trace,
 }
+
+setLoggerName('nco-api')
