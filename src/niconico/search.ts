@@ -5,6 +5,8 @@ import type {
   SearchResponseOk,
 } from '../types/niconico/search.js'
 
+import { logger } from '../utils/logger.js'
+
 const API_BASE_URL =
   'https://snapshot.search.nicovideo.jp/api/v2/snapshot/video/contents/search'
 
@@ -69,7 +71,7 @@ export const search = async <FieldKey extends SearchQueryFieldKey = never>(
 
     return json
   } catch (err) {
-    console.error('[nco-api/niconico/search]', err)
+    logger.error('niconico/search:', err)
   }
 
   return null

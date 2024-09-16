@@ -1,5 +1,7 @@
 import type { ParseResult } from '../../types/nco/ai.js'
 
+import { logger } from '../../utils/logger.js'
+
 const API_BASE_URL = 'https://nco.midra.me/api/ai/parse'
 
 export const parse = async (
@@ -22,7 +24,7 @@ export const parse = async (
       return json
     }
   } catch (err) {
-    console.error('[nco-api/nco/ai/parse]', err)
+    logger.error('nco/ai/parse:', err)
   }
 
   return null

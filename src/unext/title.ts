@@ -1,5 +1,7 @@
 import type { Title, TitleStage } from '../types/unext/title.js'
 
+import { logger } from '../utils/logger.js'
+
 const API_BASE_URL = 'https://cc.unext.jp'
 
 const query = `query cosmo_getTitle(
@@ -40,7 +42,7 @@ export const title = async (variables: {
       return json.data.webfront_title_stage
     }
   } catch (err) {
-    console.error('[nco-api/unext/title]', err)
+    logger.error('unext/title:', err)
   }
 
   return null

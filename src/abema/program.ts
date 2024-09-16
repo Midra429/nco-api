@@ -1,5 +1,7 @@
 import type { Program } from '../types/abema/program.js'
 
+import { logger } from '../utils/logger.js'
+
 const API_BASE_URL = 'https://api.p-c3-e.abema-tv.com/v1/video/programs/'
 
 export const program = async (
@@ -23,7 +25,7 @@ export const program = async (
       return json
     }
   } catch (err) {
-    console.error('[nco-api/abema/program]', err)
+    logger.error('abema/program:', err)
   }
 
   return null

@@ -1,5 +1,7 @@
 import type { Part, PartData } from '../types/danime/part.js'
 
+import { logger } from '../utils/logger.js'
+
 const API_BASE_URL = 'https://animestore.docomo.ne.jp/animestore/rest/WS010105'
 
 export const part = async (partId: string): Promise<PartData | null> => {
@@ -16,7 +18,7 @@ export const part = async (partId: string): Promise<PartData | null> => {
       return json.data
     }
   } catch (err) {
-    console.error('[nco-api/danime/part]', err)
+    logger.error('danime/part:', err)
   }
 
   return null

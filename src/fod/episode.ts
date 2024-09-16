@@ -1,5 +1,7 @@
 import type { Episode } from '../types/fod/episode.js'
 
+import { logger } from '../utils/logger.js'
+
 const API_BASE_URL = 'https://i.fod.fujitv.co.jp/apps/api/episode/detail'
 
 export const episode = async (
@@ -23,7 +25,7 @@ export const episode = async (
       return json
     }
   } catch (err) {
-    console.error('[nco-api/fod/episode]', err)
+    logger.error('fod/episode:', err)
   }
 
   return null

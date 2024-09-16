@@ -1,7 +1,7 @@
 import type { Threads, ThreadsData } from '../types/niconico/threads.js'
 import type { NvComment } from '../types/niconico/video.js'
 
-// const API_BASE_URL = 'https://nv-comment.nicovideo.jp'
+import { logger } from '../utils/logger.js'
 
 type RequestBody = {
   params: NvComment['params']
@@ -50,7 +50,7 @@ export const threads = async (
 
       return json.data
     } catch (err) {
-      console.error('[nco-api/niconico/threads]', err)
+      logger.error('niconico/threads:', err)
     }
   }
 

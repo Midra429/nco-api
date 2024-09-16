@@ -7,6 +7,7 @@ import type {
 } from '../types/jikkyo/kakolog.js'
 import type { V1Thread } from '@xpadev-net/niconicomments'
 
+import { logger } from '../utils/logger.js'
 import { toISOStringTz } from '../utils/toISOStringTz.js'
 
 const API_BASE_URL = 'https://jikkyo.tsukumijima.net/api/kakolog/'
@@ -127,7 +128,7 @@ export const kakolog = async <
         }
       }
     } catch (err) {
-      console.error('[nco-api/jikkyo/kakolog]', err)
+      logger.error('jikkyo/kakolog:', err)
     }
   }
 

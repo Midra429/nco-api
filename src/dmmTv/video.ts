@@ -1,5 +1,7 @@
 import type { Video, DataVideo } from '../types/dmmTv/video.js'
 
+import { logger } from '../utils/logger.js'
+
 const API_BASE_URL = 'https://api.tv.dmm.com/graphql'
 
 const query =
@@ -37,7 +39,7 @@ export const video = async (variables: {
       return json.data.video
     }
   } catch (err) {
-    console.error('[nco-api/dmmTv/video]', err)
+    logger.error('dmmTv/video:', err)
   }
 
   return null
