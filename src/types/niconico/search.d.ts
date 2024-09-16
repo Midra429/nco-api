@@ -90,6 +90,8 @@ export type SearchQuerySortKey = Extract<
   `${string}${'Counter' | 'Seconds' | 'Time'}`
 >
 
+export type SearchQuerySort = `${'-' | '+'}${SearchQuerySortKey}`
+
 /**
  * クエリパラメータ
  */
@@ -128,9 +130,9 @@ export type SearchQuery<FieldKey extends SearchQueryFieldKey = never> = {
 
   /**
    * ソート順をソートの方向の記号とフィールド名を連結したもので指定します。\
-   * ソートの方向は昇順または降順かを`'+'`か`'-'`で指定し、ない場合はデフォルトとして`'-'`となります。
+   * ソートの方向は昇順または降順かを`'+'`か`'-'`で指定してください。
    */
-  _sort: `${'' | '-' | '+'}${SearchQuerySortKey}`
+  _sort: SearchQuerySort
 
   /**
    * 返ってくるコンテンツの取得オフセット。最大:100,000
