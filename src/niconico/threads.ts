@@ -8,6 +8,7 @@ type RequestBody = {
   threadKey: NvComment['threadKey']
   additionals: {
     when?: number
+    res_from?: number
   }
 }
 
