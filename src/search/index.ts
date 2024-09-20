@@ -59,7 +59,7 @@ const sortingSearchData = ({
   // 仕分け作業
   for (const val of data) {
     if (val.channelId) {
-      // dアニメストア・分割 (ログイン必須)
+      // dアニメ(分割)
       if (
         val.channelId === DANIME_CHANNEL_ID &&
         REGEXP_DANIME_CHAPTER.test(val.title) &&
@@ -79,9 +79,12 @@ const sortingSearchData = ({
         continue
       }
 
-      // dアニメストア
+      // dアニメ
       if (val.channelId === DANIME_CHANNEL_ID) {
-        if (ncoParser.compare(input.rawText, val.title, true)) {
+        if (
+          options.danime &&
+          ncoParser.compare(input.rawText, val.title, true)
+        ) {
           contents.danime.push(val)
         }
 
@@ -89,13 +92,16 @@ const sortingSearchData = ({
       }
 
       // 公式
-      if (ncoParser.compare(input.rawText, val.title, true)) {
+      if (
+        options.official &&
+        ncoParser.compare(input.rawText, val.title, true)
+      ) {
         contents.official.push(val)
 
         continue
       }
     } else if (val.userId) {
-      // コメント専用動画
+      // コメント専用
       if (
         val.tags &&
         /(^|\s)(コメント専用動画|SZBH方式)(\s|$)/i.test(val.tags)

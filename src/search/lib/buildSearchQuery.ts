@@ -20,9 +20,11 @@ export type BuildSearchQueryInput = {
 }
 
 export type BuildSearchQueryOptions = {
-  /** 公式 / dアニメ */
+  /** 公式 */
   official?: boolean
-  /** dアニメ (分割) */
+  /** dアニメ */
+  danime?: boolean
+  /** dアニメ(分割) */
   chapter?: boolean
   /** コメント専用 */
   szbh?: boolean
@@ -36,13 +38,13 @@ export type BuildSearchQueryArgs = {
 }
 
 /**
- * JSONフィルター (通常 / dアニメストア)
+ * JSONフィルター (公式, dアニメ)
  */
 const getJsonFilterOfficial = ({
   input,
   options,
 }: BuildSearchQueryArgs): SearchQueryJsonFilter | null => {
-  if (!options.official) return null
+  if (!options.official && !options.danime) return null
 
   const andFilters: SearchQueryJsonFilter[] = [
     {
@@ -72,7 +74,7 @@ const getJsonFilterOfficial = ({
 }
 
 /**
- * JSONフィルター (コメント専用動画)
+ * JSONフィルター (コメント専用)
  */
 const getJsonFilterSzbh = ({
   input,
@@ -118,7 +120,7 @@ const getJsonFilterSzbh = ({
 }
 
 /**
- * JSONフィルター (dアニメストア・分割)
+ * JSONフィルター (dアニメ(分割))
  */
 const getJsonFilterChapter = ({
   options,
