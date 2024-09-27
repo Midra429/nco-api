@@ -16,6 +16,8 @@ export const JIKKYO_CHANNELS_DTV = {
   jk10: 'テレ玉',
   jk11: 'tvk',
   jk12: 'チバテレビ',
+  jk13: 'サンテレビ',
+  jk14: 'KBS京都',
 } as const
 
 /**
@@ -353,6 +355,8 @@ export const CHANNEL_IDS_JIKKYO_SYOBOCAL = [
   ['jk10', '14'],
   ['jk11', '8'],
   ['jk12', '13'],
+  ['jk13', '58'],
+  ['jk14', '66'],
   ['jk101', '9'],
   ['jk103', '179'],
   ['jk141', '71'],
