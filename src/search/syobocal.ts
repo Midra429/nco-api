@@ -1,3 +1,5 @@
+import type { SyoboCalChannelId } from '../types/constants.js'
+
 import { ncoParser } from '@midra/nco-parser'
 import { similarity } from '@midra/nco-parser/utils/similarity'
 import { romanNum as removeRomanNum } from '@midra/nco-parser/normalize/lib/remove/romanNum'
@@ -18,11 +20,12 @@ export const syobocal = async (
     subtitle?: string | null
   },
   options: {
+    channelIds?: SyoboCalChannelId[]
     userAgent?: string
   } = {}
 ) => {
   const { title, seasonNumber, episodeNumber, subtitle } = input
-  const { userAgent } = options
+  const { channelIds, userAgent } = options
 
   if (!title || episodeNumber == null) {
     return null
@@ -105,7 +108,7 @@ export const syobocal = async (
       {
         TID: searchResultsAll.map((v) => v.TID),
         Count: episodeNumber,
-        ChID: CHANNEL_IDS_JIKKYO_SYOBOCAL.map((v) => v[1]),
+        ChID: channelIds ?? CHANNEL_IDS_JIKKYO_SYOBOCAL.map((v) => v[1]),
       },
       { userAgent }
     )) ?? {}
