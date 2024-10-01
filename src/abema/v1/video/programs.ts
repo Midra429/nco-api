@@ -1,10 +1,10 @@
-import type { Program } from '../types/abema/program.js'
+import type { Program } from '../../../types/abema/v1/video/programs.js'
 
-import { logger } from '../utils/logger.js'
+import { logger } from '../../../utils/logger.js'
 
 const API_BASE_URL = 'https://api.p-c3-e.abema-tv.com/v1/video/programs/'
 
-export const program = async (
+export const programs = async (
   id: string,
   token: string
 ): Promise<Program | null> => {
@@ -25,7 +25,7 @@ export const program = async (
       return json
     }
   } catch (err) {
-    logger.error('abema/program:', err)
+    logger.error('abema/v1/video/programs:', err)
   }
 
   return null
