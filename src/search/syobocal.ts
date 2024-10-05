@@ -131,7 +131,11 @@ export const syobocal = async (
           val[1][episodeNumber]
         )
 
-        if (0.85 <= similarity(subtitleNormalized, scSubtitleNormalized)) {
+        if (
+          0.85 <= similarity(subtitleNormalized, scSubtitleNormalized) ||
+          subtitleNormalized.includes(scSubtitleNormalized) ||
+          scSubtitleNormalized.includes(subtitleNormalized)
+        ) {
           tid = val[0]
 
           break
