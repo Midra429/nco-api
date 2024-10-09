@@ -1,4 +1,4 @@
-import type { NICONICO_GENRES } from '../../constants.js'
+import type { NiconicoGenre } from '../constants.js'
 
 /**
  * スナップショット検索API v2
@@ -67,7 +67,7 @@ export type SearchFields = {
   'genre': string
 
   /** ジャンル完全一致 */
-  'genre.keyword': (typeof NICONICO_GENRES)[number]
+  'genre.keyword': NiconicoGenre
 }
 
 export type SearchFieldKey = keyof SearchFields
