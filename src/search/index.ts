@@ -1,15 +1,16 @@
+import type { Extracted } from '@midra/nco-parser/extract'
 import type {
   SearchQueryFieldKey,
   SearchData,
 } from '../types/niconico/search.js'
 import type { BuildSearchQueryArgs } from './lib/buildSearchQuery.js'
 
-import { DANIME_CHANNEL_ID } from '../constants.js'
 import { ncoParser } from '@midra/nco-parser'
+
+import { DANIME_CHANNEL_ID, REGEXP_DANIME_CHAPTER } from '../constants.js'
+
 import { search as niconicoSearch } from '../niconico/index.js'
 import { buildSearchQuery } from './lib/buildSearchQuery.js'
-
-const REGEXP_DANIME_CHAPTER = /^(?<title>.+)Chapter\.(?<chapter>[1-9])$/
 
 const fields = [
   'contentId',
@@ -56,6 +57,38 @@ const sortingSearchData = ({
     szbh: [],
   }
 
+  const extracted: Extracted = {
+    normalized: ncoParser.normalize(input.rawText, {
+      remove: {
+        bracket: true,
+      },
+    }),
+    title: input.title ?? null,
+    season:
+      input.seasonText != null && input.seasonNumber != null
+        ? {
+            text: input.seasonText,
+            number: input.seasonNumber,
+            kansuji: null,
+            prefix: null,
+            suffix: null,
+            range: [0, 0],
+          }
+        : null,
+    episode:
+      input.episodeText != null && input.episodeNumber != null
+        ? {
+            text: input.episodeText,
+            number: input.episodeNumber,
+            kansuji: null,
+            prefix: null,
+            suffix: null,
+            range: [0, 0],
+          }
+        : null,
+    subtitle: input.subtitle ?? null,
+  }
+
   // 仕分け作業
   for (const val of data) {
     if (val.channelId) {
@@ -69,7 +102,7 @@ const sortingSearchData = ({
 
         if (
           options?.chapter &&
-          ncoParser.compare(input.rawText, groups!.title, true)
+          ncoParser.compare(extracted, groups!.title, true)
         ) {
           const chapterNum = Number(groups!.chapter)
 
@@ -81,10 +114,7 @@ const sortingSearchData = ({
 
       // dアニメ
       if (val.channelId === DANIME_CHANNEL_ID) {
-        if (
-          options.danime &&
-          ncoParser.compare(input.rawText, val.title, true)
-        ) {
+        if (options.danime && ncoParser.compare(extracted, val.title, true)) {
           contents.danime.push(val)
         }
 
@@ -92,10 +122,7 @@ const sortingSearchData = ({
       }
 
       // 公式
-      if (
-        options.official &&
-        ncoParser.compare(input.rawText, val.title, true)
-      ) {
+      if (options.official && ncoParser.compare(extracted, val.title, true)) {
         contents.official.push(val)
 
         continue
@@ -106,10 +133,7 @@ const sortingSearchData = ({
         val.tags &&
         /(^|\s)(コメント専用動画|SZBH方式)(\s|$)/i.test(val.tags)
       ) {
-        if (
-          options?.szbh &&
-          ncoParser.compare(input.rawText, val.title, true)
-        ) {
+        if (options?.szbh && ncoParser.compare(extracted, val.title, true)) {
           contents.szbh.push(val)
         }
 
