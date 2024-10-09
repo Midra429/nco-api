@@ -1,3 +1,5 @@
+import type { NICONICO_GENRES } from '../../constants.js'
+
 /**
  * スナップショット検索API v2
  * @see https://site.nicovideo.jp/search-api-docs/snapshot
@@ -65,7 +67,7 @@ export type SearchFields = {
   'genre': string
 
   /** ジャンル完全一致 */
-  'genre.keyword': string
+  'genre.keyword': (typeof NICONICO_GENRES)[number]
 }
 
 export type SearchFieldKey = keyof SearchFields
