@@ -173,12 +173,14 @@ export const search = async (args: BuildSearchQueryArgs) => {
     data,
   })
 
-  // 2回目 (公式 / dアニメ)
+  // 2回目 (公式, dアニメ)
   if (options.official && !sorted1.official.length && !sorted1.danime.length) {
     const searchQuery2 = buildSearchQuery({
       ...args,
       options: {
         official: true,
+        danime: true,
+        userAgent: args.options.userAgent,
       },
     })
 
