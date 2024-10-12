@@ -2,7 +2,6 @@ import type { SyoboCalChannelId } from '../types/constants.js'
 
 import { ncoParser } from '@midra/nco-parser'
 import { similarity } from '@midra/nco-parser/utils/similarity'
-import { romanNum as removeRomanNum } from '@midra/nco-parser/normalize/lib/remove/romanNum'
 
 import { CHANNEL_IDS_JIKKYO_SYOBOCAL } from '../constants.js'
 
@@ -31,15 +30,17 @@ export const syobocal = async (
     return null
   }
 
-  const searchWord = removeRomanNum(
-    ncoParser.normalizeAll(title, {
+  const searchWord = ncoParser.normalizeAll(
+    // ローマ数字削除
+    title.replace(/[\u2160-\u217f]/g, ''),
+    {
       adjust: {
         letterCase: 'upper',
       },
       remove: {
         space: false,
       },
-    })
+    }
   )
 
   // 検索
