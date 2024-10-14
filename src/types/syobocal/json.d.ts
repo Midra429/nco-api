@@ -2,6 +2,58 @@ import type { SyoboCalChannelId } from '../constants.js'
 
 export type SyoboCalRequestCommand = keyof SyoboCalJson
 
+type TitleFull = {
+  TID: string
+  Title: string
+  ShortTitle: string
+  TitleYomi: string
+  TitleEN: string
+  Cat: string
+  FirstCh: string
+  FirstYear: string
+  FirstMonth: string
+  FirstEndYear: string
+  FirstEndMonth: string
+  TitleFlag: string
+
+  Keywords: string
+  UserPoint: string
+  UserPointRank: string
+  TitleViewCount: string
+
+  Comment: string
+  SubTitles: string
+}
+
+type TitleLarge = Omit<TitleFull, 'Comment' | 'SubTitles'>
+
+type TitleMedium = Omit<
+  TitleLarge,
+  'Keywords' | 'UserPoint' | 'UserPointRank' | 'TitleViewCount'
+> & {
+  Links: [url: string, name: string][]
+}
+
+type TitleSearch = Omit<TitleMedium, 'Links'> & {
+  Comment: string
+  Search: 1
+  Programs?: Program[]
+}
+
+type Program = {
+  PID: string
+  TID: string
+  ChID: SyoboCalChannelId
+  ChName: string
+  ChEPGURL: string
+  Count: string
+  StTime: string
+  EdTime: string
+  SubTitle2: string
+  ProgComment: string
+  ConfFlag: null
+}
+
 type SyoboCalJson = {
   TitleFull: {
     parameters: {
@@ -9,54 +61,29 @@ type SyoboCalJson = {
     }
     response: {
       Titles: {
-        [TID: string]: {
-          TID: string
-          Title: string
-          ShortTitle: string
-          TitleYomi: string
-          TitleEN: string
-          Cat: string
-          FirstCh: string
-          FirstYear: string
-          FirstMonth: string
-          FirstEndYear: string
-          FirstEndMonth: string
-          TitleFlag: string
-
-          Keywords: string
-          UserPoint: string
-          UserPointRank: string
-          TitleViewCount: string
-
-          Comment: string
-          SubTitles: string
-        }
+        [TID: string]: TitleFull
       }
     }
   }
 
   TitleLarge: {
-    parameters: SyoboCalJson['TitleFull']['parameters']
+    parameters: {
+      TID: string | string[]
+    }
     response: {
       Titles: {
-        [TID: string]: Omit<
-          SyoboCalJson['TitleFull']['response']['Titles'][string],
-          'Comment' | 'SubTitles'
-        >
+        [TID: string]: TitleLarge
       }
     }
   }
 
   TitleMedium: {
-    parameters: SyoboCalJson['TitleFull']['parameters']
+    parameters: {
+      TID: string | string[]
+    }
     response: {
       Titles: {
-        [TID: string]: Omit<
-          SyoboCalJson['TitleLarge']['response']['Titles'][string],
-          'Keywords' | 'UserPoint' | 'UserPointRank' | 'TitleViewCount'
-        > & {
-          Links: [url: string, name: string][]
-        }
+        [TID: string]: TitleMedium
       }
     }
   }
@@ -69,19 +96,7 @@ type SyoboCalJson = {
     }
     response: {
       Programs: {
-        [PID: string]: {
-          PID: string
-          TID: string
-          ChID: SyoboCalChannelId
-          ChName: string
-          ChEPGURL: string
-          Count: string
-          StTime: string
-          EdTime: string
-          SubTitle2: string
-          ProgComment: string
-          ConfFlag: null
-        }
+        [PID: string]: Program
       }
     }
   }
@@ -92,7 +107,11 @@ type SyoboCalJson = {
       Count: number | number[]
       ChID?: SyoboCalChannelId | SyoboCalChannelId[]
     }
-    response: SyoboCalJson['ProgramByPID']['response']
+    response: {
+      Programs: {
+        [PID: string]: Program
+      }
+    }
   }
 
   ProgramByDate: {
@@ -108,7 +127,11 @@ type SyoboCalJson = {
       TID?: string | string[]
       ChID?: SyoboCalChannelId | SyoboCalChannelId[]
     }
-    response: SyoboCalJson['ProgramByPID']['response']
+    response: {
+      Programs: {
+        [PID: string]: Program
+      }
+    }
   }
 
   SubTitles: {
@@ -138,18 +161,11 @@ type SyoboCalJson = {
   TitleSearch: {
     parameters: {
       Search: string
-      Limit: number
+      Limit?: number
     }
     response: {
       Titles: {
-        [TID: string]: Omit<
-          SyoboCalJson['TitleMedium']['response']['Titles'][string],
-          'Links'
-        > & {
-          Comment: string
-          Search: 1
-          Programs?: SyoboCalJson['ProgramByPID']['response']['Programs'][string][]
-        }
+        [TID: string]: TitleSearch
       }
     }
   }
