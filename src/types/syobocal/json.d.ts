@@ -1,3 +1,4 @@
+import type { SYOBOCAL_CATEGORIES } from '../../constants.js'
 import type { SyoboCalChannelId } from '../constants.js'
 
 export type SyoboCalReqCommand = keyof SyoboCalJson
@@ -8,7 +9,7 @@ export type SyoboCalTitleFull = {
   ShortTitle: string
   TitleYomi: string
   TitleEN: string
-  Cat: string
+  Cat: keyof typeof SYOBOCAL_CATEGORIES
   FirstCh: string
   FirstYear: string
   FirstMonth: string
