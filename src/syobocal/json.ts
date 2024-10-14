@@ -1,6 +1,6 @@
 import type { UnionToIntersection } from 'utility-types'
 import type {
-  SyoboCalRequestCommand,
+  SyoboCalReqCommand,
   SyoboCalParameters,
   SyoboCalResponse,
 } from '../types/syobocal/json.js'
@@ -9,7 +9,7 @@ import { logger } from '../utils/logger.js'
 
 const API_BASE_URL = 'https://cal.syoboi.jp/json.php'
 
-export const json = async <Command extends SyoboCalRequestCommand>(
+export const json = async <Command extends SyoboCalReqCommand>(
   commands: Command[],
   params: SyoboCalParameters<Command>,
   options?: {

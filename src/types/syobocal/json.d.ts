@@ -1,8 +1,8 @@
 import type { SyoboCalChannelId } from '../constants.js'
 
-export type SyoboCalRequestCommand = keyof SyoboCalJson
+export type SyoboCalReqCommand = keyof SyoboCalJson
 
-type TitleFull = {
+export type SyoboCalTitleFull = {
   TID: string
   Title: string
   ShortTitle: string
@@ -25,22 +25,25 @@ type TitleFull = {
   SubTitles: string
 }
 
-type TitleLarge = Omit<TitleFull, 'Comment' | 'SubTitles'>
+export type SyoboCalTitleLarge = Omit<
+  SyoboCalTitleFull,
+  'Comment' | 'SubTitles'
+>
 
-type TitleMedium = Omit<
-  TitleLarge,
+export type SyoboCalTitleMedium = Omit<
+  SyoboCalTitleLarge,
   'Keywords' | 'UserPoint' | 'UserPointRank' | 'TitleViewCount'
 > & {
   Links: [url: string, name: string][]
 }
 
-type TitleSearch = Omit<TitleMedium, 'Links'> & {
+export type SyoboCalTitleSearch = Omit<SyoboCalTitleMedium, 'Links'> & {
   Comment: string
   Search: 1
-  Programs?: Program[]
+  Programs?: SyoboCalProgram[]
 }
 
-type Program = {
+export type SyoboCalProgram = {
   PID: string
   TID: string
   ChID: SyoboCalChannelId
@@ -54,14 +57,14 @@ type Program = {
   ConfFlag: null
 }
 
-type SyoboCalJson = {
+export type SyoboCalJson = {
   TitleFull: {
     parameters: {
       TID: string | string[]
     }
     response: {
       Titles: {
-        [TID: string]: TitleFull
+        [TID: string]: SyoboCalTitleFull
       }
     }
   }
@@ -72,7 +75,7 @@ type SyoboCalJson = {
     }
     response: {
       Titles: {
-        [TID: string]: TitleLarge
+        [TID: string]: SyoboCalTitleLarge
       }
     }
   }
@@ -83,7 +86,7 @@ type SyoboCalJson = {
     }
     response: {
       Titles: {
-        [TID: string]: TitleMedium
+        [TID: string]: SyoboCalTitleMedium
       }
     }
   }
@@ -96,7 +99,7 @@ type SyoboCalJson = {
     }
     response: {
       Programs: {
-        [PID: string]: Program
+        [PID: string]: SyoboCalProgram
       }
     }
   }
@@ -109,7 +112,7 @@ type SyoboCalJson = {
     }
     response: {
       Programs: {
-        [PID: string]: Program
+        [PID: string]: SyoboCalProgram
       }
     }
   }
@@ -129,7 +132,7 @@ type SyoboCalJson = {
     }
     response: {
       Programs: {
-        [PID: string]: Program
+        [PID: string]: SyoboCalProgram
       }
     }
   }
@@ -148,15 +151,15 @@ type SyoboCalJson = {
     }
   }
 
-  ChFilter: {
-    parameters: {}
-    response: {}
-  }
+  // ChFilter: {
+  //   parameters: {}
+  //   response: {}
+  // }
 
-  ChIDFilter: {
-    parameters: {}
-    response: {}
-  }
+  // ChIDFilter: {
+  //   parameters: {}
+  //   response: {}
+  // }
 
   TitleSearch: {
     parameters: {
@@ -165,14 +168,14 @@ type SyoboCalJson = {
     }
     response: {
       Titles: {
-        [TID: string]: TitleSearch
+        [TID: string]: SyoboCalTitleSearch
       }
     }
   }
 }
 
-export type SyoboCalParameters<Command extends SyoboCalRequestCommand> =
+export type SyoboCalParameters<Command extends SyoboCalReqCommand> =
   SyoboCalJson[Command]['parameters']
 
-export type SyoboCalResponse<Command extends SyoboCalRequestCommand> =
+export type SyoboCalResponse<Command extends SyoboCalReqCommand> =
   SyoboCalJson[Command]['response']
