@@ -99,7 +99,7 @@ describe('check', () => {
 
   test('syobocal/db', async () => {
     const response = await ncoApi.syobocal.db('ProgLookup', {
-      TID: '7214',
+      TID: '5028',
     })
 
     console.log('syobocal/db:', response)

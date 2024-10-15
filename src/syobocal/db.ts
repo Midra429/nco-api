@@ -46,56 +46,56 @@ export const db = async <Command extends SyoboCalCommand>(
           const titleItem = (xml as SyoboCalResponseXml<'TitleLookup'>)
             .TitleLookupResponse.TitleItems.TitleItem
 
-          return Array.isArray(titleItem)
-            ? Object.fromEntries(
-                titleItem.map((item) => {
-                  return [
-                    item.TID,
+          return (
+            Array.isArray(titleItem)
+              ? Object.fromEntries(
+                  titleItem.map((item) => [
+                    item.TID._text,
                     Object.fromEntries(
                       Object.entries(item).map(([key, val]) => [key, val._text])
                     ),
-                  ]
-                })
-              )
-            : Object.fromEntries([
-                [
-                  titleItem.TID,
-                  Object.fromEntries(
-                    Object.entries(titleItem).map(([key, val]) => [
-                      key,
-                      val._text,
-                    ])
-                  ),
-                ],
-              ])
+                  ])
+                )
+              : Object.fromEntries([
+                  [
+                    titleItem.TID._text,
+                    Object.fromEntries(
+                      Object.entries(titleItem).map(([key, val]) => [
+                        key,
+                        val._text,
+                      ])
+                    ),
+                  ],
+                ])
+          ) as SyoboCalResponseJson<'TitleLookup'>
         }
 
         case 'ProgLookup': {
           const progItem = (xml as SyoboCalResponseXml<'ProgLookup'>)
             .ProgLookupResponse.ProgItems.ProgItem
 
-          return Array.isArray(progItem)
-            ? Object.fromEntries(
-                progItem.map((item) => {
-                  return [
-                    item.TID,
+          return (
+            Array.isArray(progItem)
+              ? Object.fromEntries(
+                  progItem.map((item) => [
+                    item.PID._text,
                     Object.fromEntries(
                       Object.entries(item).map(([key, val]) => [key, val._text])
                     ),
-                  ]
-                })
-              )
-            : Object.fromEntries([
-                [
-                  progItem.PID,
-                  Object.fromEntries(
-                    Object.entries(progItem).map(([key, val]) => [
-                      key,
-                      val._text,
-                    ])
-                  ),
-                ],
-              ])
+                  ])
+                )
+              : Object.fromEntries([
+                  [
+                    progItem.PID._text,
+                    Object.fromEntries(
+                      Object.entries(progItem).map(([key, val]) => [
+                        key,
+                        val._text,
+                      ])
+                    ),
+                  ],
+                ])
+          ) as SyoboCalResponseJson<'ProgLookup'>
         }
       }
     }
