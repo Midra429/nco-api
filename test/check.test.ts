@@ -17,43 +17,33 @@ describe('check', () => {
   //       '陰の実力者になりたくて！ 2nd season(第2期) #01 無法都市',
   //     ],
   //   ]
-
   //   expect(TITLES.every(([a, b]) => ncoParser.compare(a, b))).toBe(true)
   // })
-
   // test('search', async () => {
   //   const TITLE = 'うらら迷路帖 一占 少女と占い、時々おなか'
-
   //   const contents = await ncoApi.search({
   //     rawText: TITLE,
   //     guest: true,
   //     chapter: true,
   //     szbh: true,
   //   })
-
   //   if (contents) {
   //     console.table(contents.normal)
   //     console.table(contents.chapter)
   //     console.table(contents.szbh)
-
   //     const contentIds = Object.values(contents)
   //       .flat()
   //       .map((v) => v.contentId)
-
   //     const videos = await ncoApi.niconico.multipleVideo(contentIds)
-
   //     const threads = await Promise.all(
   //       videos.map(async (videoData) => {
   //         if (!videoData) return null
-
   //         const threadsData = await ncoApi.niconico.threads(
   //           videoData.comment.nvComment
   //         )
-
   //         return threadsData
   //       })
   //     )
-
   //     threads.forEach((val) => {
   //       console.log(
   //         val?.threads.map((v) => ({
@@ -65,28 +55,23 @@ describe('check', () => {
   //     })
   //   }
   // })
-
-  test('search', async () => {
-    const videoData = await ncoApi.niconico.video('sm43887707')
-
-    console.log('videoData:', videoData)
-
-    if (videoData) {
-      const threadsData = await ncoApi.niconico.threads(
-        videoData.comment.nvComment
-      )
-
-      console.log(
-        'threadsData:',
-        threadsData?.threads.map((v) => ({
-          id: v.id,
-          fork: v.fork,
-          commentCount: v.commentCount,
-        }))
-      )
-    }
-  })
-
+  // test('search', async () => {
+  //   const videoData = await ncoApi.niconico.video('sm43887707')
+  //   console.log('videoData:', videoData)
+  //   if (videoData) {
+  //     const threadsData = await ncoApi.niconico.threads(
+  //       videoData.comment.nvComment
+  //     )
+  //     console.log(
+  //       'threadsData:',
+  //       threadsData?.threads.map((v) => ({
+  //         id: v.id,
+  //         fork: v.fork,
+  //         commentCount: v.commentCount,
+  //       }))
+  //     )
+  //   }
+  // })
   // test('jikkyo', async () => {
   //   // const title = 'お兄ちゃんはおしまい！ #01 まひろとイケないカラダ'
   //   // const title = '僕のヒーローアカデミア　第7期 第144話 DIVISION'
@@ -101,18 +86,22 @@ describe('check', () => {
   //   // const title = '杖と剣のウィストリア シーズン1, 第ニ話 不屈のごとく'
   //   // const title = 'SHY 第13話 ヒーローズ・ハイ'
   //   const title = '僕の心のヤバイやつ 2期 karte13 僕らは探している'
-
   //   const extracted = ncoParser.extract(title)
-
   //   const result = await ncoApi.searchSyobocal({
   //     title: extracted.title,
   //     seasonNumber: extracted.season?.number,
   //     episodeNumber: extracted.episode?.number,
   //     subtitle: extracted.subtitle,
   //   })
-
   //   console.log('result:', result)
-
   //   expect(!!result).toBe(true)
   // }, 10000)
+
+  test('syobocal/db', async () => {
+    const response = await ncoApi.syobocal.db('ProgLookup', {
+      TID: '7214',
+    })
+
+    console.log('syobocal/db:', response)
+  })
 })
