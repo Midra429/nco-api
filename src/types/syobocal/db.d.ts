@@ -4,15 +4,15 @@ import type { SyoboCalTitleFull } from './json.js'
 export type SyoboCalCommand = keyof SyoboCalDb
 
 // TitleLookup
-type SyoboCalTitleXml = SyoboCalTitleFull
+type SyoboCalTitleDb = SyoboCalTitleFull
 
 type SyoboCalTitleItem = {
-  [key in keyof SyoboCalTitleXml]: {
-    _text: SyoboCalTitleXml[key]
+  [key in keyof SyoboCalTitleDb]: {
+    _text: SyoboCalTitleDb[key]
   }
 }
 
-export type SyoboCalTitleXmlRaw = {
+export type SyoboCalTitleDbRaw = {
   TitleLookupResponse: {
     TitleItems: {
       TitleItem: SyoboCalTitleItem | SyoboCalTitleItem[]
@@ -21,7 +21,7 @@ export type SyoboCalTitleXmlRaw = {
 }
 
 // ProgLookup
-type SyoboCalProgramXml = {
+type SyoboCalProgramDb = {
   LastUpdate: string
   PID: string
   TID: string
@@ -39,12 +39,12 @@ type SyoboCalProgramXml = {
 }
 
 type SyoboCalProgItem = {
-  [key in keyof SyoboCalProgramXml]: {
-    _text: SyoboCalProgramXml[key]
+  [key in keyof SyoboCalProgramDb]: {
+    _text: SyoboCalProgramDb[key]
   }
 }
 
-export type SyoboCalProgramXmlRaw = {
+export type SyoboCalProgramDbRaw = {
   ProgLookupResponse: {
     ProgItems: {
       ProgItem: SyoboCalProgItem | SyoboCalProgItem[]
@@ -57,12 +57,12 @@ type SyoboCalDb = {
     parameters: {
       TID?: string | string[]
       LastUpdate?: string
-      Fields?: (keyof SyoboCalTitleXml)[]
+      Fields?: (keyof SyoboCalTitleDb)[]
     }
     response: {
-      xml: SyoboCalTitleXmlRaw
+      xml: SyoboCalTitleDbRaw
       json: {
-        [TID: string]: SyoboCalTitleXml
+        [TID: string]: SyoboCalTitleDb
       }
     }
   }
@@ -75,14 +75,14 @@ type SyoboCalDb = {
       Range?: string
       Count?: number | number[]
       LastUpdate?: string
-      Fields?: (keyof SyoboCalProgramXml)[]
+      Fields?: (keyof SyoboCalProgramDb)[]
       JOIN?: string
       PID?: string | string[]
     }
     response: {
-      xml: SyoboCalProgramXmlRaw
+      xml: SyoboCalProgramDbRaw
       json: {
-        [PID: string]: SyoboCalProgramXml
+        [PID: string]: SyoboCalProgramDb
       }
     }
   }
