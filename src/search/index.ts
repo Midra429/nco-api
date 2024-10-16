@@ -22,6 +22,7 @@ const fields = [
   'thumbnailUrl',
   'startTime',
   'commentCounter',
+  'categoryTags',
   'tags',
 ] as const satisfies SearchQueryFieldKey[]
 
