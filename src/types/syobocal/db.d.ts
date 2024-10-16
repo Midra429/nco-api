@@ -3,9 +3,25 @@ import type { SyoboCalTitleFull } from './json.js'
 
 export type SyoboCalCommand = keyof SyoboCalDb
 
-export type SyoboCalTitleJson = SyoboCalTitleFull
+// TitleLookup
+type SyoboCalTitleXml = SyoboCalTitleFull
 
-export type SyoboCalProgramJson = {
+type SyoboCalTitleItem = {
+  [key in keyof SyoboCalTitleXml]: {
+    _text: SyoboCalTitleXml[key]
+  }
+}
+
+export type SyoboCalTitleXmlRaw = {
+  TitleLookupResponse: {
+    TitleItems: {
+      TitleItem: SyoboCalTitleItem | SyoboCalTitleItem[]
+    }
+  }
+}
+
+// ProgLookup
+type SyoboCalProgramXml = {
   LastUpdate: string
   PID: string
   TID: string
@@ -22,27 +38,13 @@ export type SyoboCalProgramJson = {
   Revision: string
 }
 
-type SyoboCalTitleItem = {
-  [key in keyof SyoboCalTitleJson]: {
-    _text: SyoboCalTitleJson[key]
-  }
-}
-
-export type SyoboCalTitleXml = {
-  TitleLookupResponse: {
-    TitleItems: {
-      TitleItem: SyoboCalTitleItem | SyoboCalTitleItem[]
-    }
-  }
-}
-
 type SyoboCalProgItem = {
-  [key in keyof SyoboCalProgramJson]: {
-    _text: SyoboCalProgramJson[key]
+  [key in keyof SyoboCalProgramXml]: {
+    _text: SyoboCalProgramXml[key]
   }
 }
 
-export type SyoboCalProgramXml = {
+export type SyoboCalProgramXmlRaw = {
   ProgLookupResponse: {
     ProgItems: {
       ProgItem: SyoboCalProgItem | SyoboCalProgItem[]
@@ -50,17 +52,17 @@ export type SyoboCalProgramXml = {
   }
 }
 
-export type SyoboCalDb = {
+type SyoboCalDb = {
   TitleLookup: {
     parameters: {
       TID?: string | string[]
       LastUpdate?: string
-      Fields?: (keyof SyoboCalTitleJson)[]
+      Fields?: (keyof SyoboCalTitleXml)[]
     }
     response: {
-      xml: SyoboCalTitleXml
+      xml: SyoboCalTitleXmlRaw
       json: {
-        [TID: string]: SyoboCalTitleJson
+        [TID: string]: SyoboCalTitleXml
       }
     }
   }
@@ -73,14 +75,14 @@ export type SyoboCalDb = {
       Range?: string
       Count?: number | number[]
       LastUpdate?: string
-      Fields?: (keyof SyoboCalProgramJson)[]
+      Fields?: (keyof SyoboCalProgramXml)[]
       JOIN?: string
       PID?: string | string[]
     }
     response: {
-      xml: SyoboCalProgramXml
+      xml: SyoboCalProgramXmlRaw
       json: {
-        [PID: string]: SyoboCalProgramJson
+        [PID: string]: SyoboCalProgramXml
       }
     }
   }
