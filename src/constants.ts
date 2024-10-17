@@ -451,7 +451,10 @@ export const SYOBOCAL_CHANNELS = {
 /**
  * ニコニコ実況としょぼいカレンダーのチャンネルIDのペア
  */
-export const CHANNEL_IDS_JIKKYO_SYOBOCAL = [
+export const CHANNEL_IDS_JIKKYO_SYOBOCAL: [
+  keyof typeof JIKKYO_CHANNELS,
+  keyof typeof SYOBOCAL_CHANNELS
+][] = [
   ['jk1', '1'],
   ['jk2', '2'],
   ['jk4', '4'],
@@ -485,15 +488,15 @@ export const CHANNEL_IDS_JIKKYO_SYOBOCAL = [
   ['jk263', '273'],
   ['jk265', '272'],
   ['jk333', '20'],
-] as const satisfies [
-  keyof typeof JIKKYO_CHANNELS,
-  keyof typeof SYOBOCAL_CHANNELS
-][]
+]
 
 /**
  * ニコニコ実況とTVerのチャンネルIDのペア
  */
-export const CHANNEL_IDS_JIKKYO_TVER = [
+export const CHANNEL_IDS_JIKKYO_TVER: [
+  keyof typeof JIKKYO_CHANNELS,
+  keyof typeof TVER_CHANNELS
+][] = [
   ['jk1', '120'],
   ['jk2', '124'],
   ['jk4', '128'],
@@ -525,7 +528,4 @@ export const CHANNEL_IDS_JIKKYO_TVER = [
   ['jk260', '260'],
   ['jk263', '263'],
   ['jk265', '265'],
-] as const satisfies [
-  keyof typeof JIKKYO_CHANNELS,
-  keyof typeof TVER_CHANNELS
-][]
+]
