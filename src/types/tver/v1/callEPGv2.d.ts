@@ -1,3 +1,5 @@
+import type { TVerChannelId } from '../../constants.js'
+
 export type EPGv2Response = {
   api_version: string
   code: number
@@ -21,7 +23,7 @@ export type Content = {
 }
 
 export type Broadcaster = {
-  id: string
+  id: TVerChannelId
   name: string
   label: string
 }
