@@ -9,6 +9,7 @@ import * as abema from './abema/index.js'
 import * as dmmTv from './dmmTv/index.js'
 import * as fod from './fod/index.js'
 import * as unext from './unext/index.js'
+import * as tver from './tver/index.js'
 
 export const ncoApi = {
   nco,
@@ -22,4 +23,5 @@ export const ncoApi = {
   dmmTv,
   fod,
   unext,
+  tver,
 }
