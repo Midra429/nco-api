@@ -87,6 +87,11 @@
       "import": "./dist/syobocal/*.js",
       "default": "./dist/syobocal/*.js"
     },
+    "./tver/*": {
+      "types": "./dist/tver/*.d.ts",
+      "import": "./dist/tver/*.js",
+      "default": "./dist/tver/*.js"
+    },
     "./types/*": {
       "types": "./dist/types/*.d.ts"
     },
