@@ -32,16 +32,16 @@ export const NICONICO_GENRES = [
  * しょぼいカレンダーのカテゴリ
  */
 export const SYOBOCAL_CATEGORIES = {
-  1: 'アニメ',
-  10: 'アニメ(終了/再放送)',
-  7: 'OVA',
-  5: 'アニメ関連',
-  4: '特撮',
-  8: '映画',
-  3: 'テレビ',
-  2: 'ラジオ',
-  6: 'メモ',
-  0: 'その他',
+  '1': 'アニメ',
+  '10': 'アニメ(終了/再放送)',
+  '7': 'OVA',
+  '5': 'アニメ関連',
+  '4': '特撮',
+  '8': '映画',
+  '3': 'テレビ',
+  '2': 'ラジオ',
+  '6': 'メモ',
+  '0': 'その他',
 } as const
 
 /**
@@ -56,6 +56,7 @@ export const JIKKYO_CHANNELS_DTV = {
   jk7: 'テレビ東京',
   jk8: 'フジテレビ',
   jk9: 'TOKYO MX',
+
   jk10: 'テレ玉',
   jk11: 'tvk',
   jk12: 'チバテレビ',
@@ -93,6 +94,70 @@ export const JIKKYO_CHANNELS_BS_CS = {
 export const JIKKYO_CHANNELS = {
   ...JIKKYO_CHANNELS_DTV,
   ...JIKKYO_CHANNELS_BS_CS,
+} as const
+
+/**
+ * TVerのチャンネル一覧 (地デジ・東京)
+ */
+export const TVER_CHANNELS_DTV = {
+  '120': 'NHK総合・東京',
+  '124': 'NHK Eテレ・東京',
+  '128': '日テレ',
+  '138': 'テレビ朝日',
+  '131': 'TBS',
+  '142': 'テレ東',
+  '134': 'フジテレビ',
+  '399': 'TOKYO MX',
+
+  '426': 'テレ玉',
+  '404': 'tvk',
+  '417': 'チバテレ',
+  '593': 'サンテレビ',
+  '588': 'KBS京都',
+} as const
+
+/**
+ * TVerのチャンネル一覧 (BS)
+ */
+export const TVER_CHANNELS_BS = {
+  '1': 'NHKBS',
+  '5': 'BS日テレ',
+  '8': 'BS朝日',
+  '11': 'BS-TBS',
+  '14': 'ＢＳテレ東',
+  '17': 'BSフジ',
+  '20': 'WOWOWプライム',
+  '21': 'WOWOWライブ',
+  '22': 'WOWOWシネマ',
+  '23': 'スターチャンネル1',
+  '24': 'スターチャンネル2',
+  '25': 'スターチャンネル3',
+  '26': 'BS11',
+  '27': 'BS12 トゥエルビ',
+  '28': '放送大学テレビ',
+  '29': '放送大学テレビ',
+  '30': 'グリーンチャンネル',
+  '31': 'BSアニマックス',
+  '34': 'J SPORTS 1',
+  '35': 'J SPORTS 2',
+  '36': 'J SPORTS 3',
+  '37': 'J SPORTS 4',
+  '38': 'BS釣りビジョン',
+  '39': 'WOWOWプラス',
+  '40': '日本映画専門ch',
+  '41': 'ディズニーch',
+  '61': 'スポーツライブ＋',
+  '260': 'BS松竹東急',
+  '263': 'BSJapanext',
+  '265': 'BSよしもと',
+} as const
+
+/**
+ * TVerのチャンネル一覧
+ */
+export const TVER_CHANNELS = {
+  ...TVER_CHANNELS_DTV,
+  ...TVER_CHANNELS_BS,
 } as const
 
 /**
@@ -395,11 +460,13 @@ export const CHANNEL_IDS_JIKKYO_SYOBOCAL = [
   ['jk7', '7'],
   ['jk8', '3'],
   ['jk9', '19'],
+
   ['jk10', '14'],
   ['jk11', '8'],
   ['jk12', '13'],
   ['jk13', '58'],
   ['jk14', '66'],
+
   ['jk101', '9'],
   ['jk103', '179'],
   ['jk141', '71'],
@@ -421,4 +488,44 @@ export const CHANNEL_IDS_JIKKYO_SYOBOCAL = [
 ] as const satisfies [
   keyof typeof JIKKYO_CHANNELS,
   keyof typeof SYOBOCAL_CHANNELS
+][]
+
+/**
+ * ニコニコ実況とTVerのチャンネルIDのペア
+ */
+export const CHANNEL_IDS_JIKKYO_TVER = [
+  ['jk1', '120'],
+  ['jk2', '124'],
+  ['jk4', '128'],
+  ['jk5', '138'],
+  ['jk6', '131'],
+  ['jk7', '142'],
+  ['jk8', '134'],
+  ['jk9', '399'],
+
+  ['jk10', '426'],
+  ['jk11', '404'],
+  ['jk12', '417'],
+  ['jk13', '593'],
+  ['jk14', '588'],
+
+  ['jk101', '1'],
+  ['jk141', '5'],
+  ['jk151', '8'],
+  ['jk161', '11'],
+  ['jk171', '14'],
+  ['jk181', '17'],
+  ['jk191', '20'],
+  ['jk192', '21'],
+  ['jk193', '22'],
+  ['jk211', '26'],
+  ['jk222', '27'],
+  ['jk236', '31'],
+  ['jk252', '39'],
+  ['jk260', '260'],
+  ['jk263', '263'],
+  ['jk265', '265'],
+] as const satisfies [
+  keyof typeof JIKKYO_CHANNELS,
+  keyof typeof TVER_CHANNELS
 ][]

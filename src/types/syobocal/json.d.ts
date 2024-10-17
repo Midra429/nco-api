@@ -9,7 +9,7 @@ export type SyoboCalTitleFull = {
   ShortTitle: string
   TitleYomi: string
   TitleEN: string
-  Cat: `${keyof typeof SYOBOCAL_CATEGORIES}`
+  Cat: keyof typeof SYOBOCAL_CATEGORIES
   FirstCh: string
   FirstYear: string
   FirstMonth: string
