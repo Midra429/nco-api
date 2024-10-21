@@ -108,7 +108,7 @@
   },
   "dependencies": {
     "@geolonia/japanese-numeral": "^1.0.2",
-    "@midra/nco-parser": "^1.0.26",
+    "@midra/nco-parser": "^1.0.27",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
