@@ -12,14 +12,19 @@ const isResponseOk = (json: VideoResponse): json is VideoResponseOk => {
   return json.meta.status === 200
 }
 
-export const video = async (contentId: string): Promise<VideoData | null> => {
+export const video = async (
+  contentId: string,
+  credentials?: RequestInit['credentials']
+): Promise<VideoData | null> => {
   if (/^[a-z]{2}\d+$/.test(contentId)) {
     const url = new URL(contentId, API_BASE_URL)
 
     url.searchParams.set('responseType', 'json')
 
     try {
-      const response = await fetch(url)
+      const response = await fetch(url, {
+        credentials,
+      })
       const json: VideoResponse = await response.json()
 
       if (!isResponseOk(json)) {
