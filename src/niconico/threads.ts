@@ -17,14 +17,15 @@ const isResponseOk = (json: Threads): json is Required<Threads> => {
 }
 
 export const threads = async (
-  request: {
+  {
+    nvComment,
+    additionals,
+  }: {
     nvComment: NvComment | null
     additionals?: RequestBody['additionals']
   },
   credentials?: RequestInit['credentials']
 ): Promise<ThreadsData | null> => {
-  const { nvComment, additionals } = request
-
   if (nvComment) {
     const url = new URL('/v1/threads', nvComment.server)
 
@@ -65,10 +66,18 @@ export const threads = async (
 }
 
 export const multipleThreads = (
-  nvComments: (NvComment | null)[],
-  additionals?: RequestBody['additionals']
+  {
+    nvComments,
+    additionals,
+  }: {
+    nvComments: (NvComment | null)[]
+    additionals?: RequestBody['additionals']
+  },
+  credentials?: RequestInit['credentials']
 ): Promise<(ThreadsData | null)[]> => {
   return Promise.all(
-    nvComments.map((nvComment) => threads({ nvComment, additionals }))
+    nvComments.map((nvComment) =>
+      threads({ nvComment, additionals }, credentials)
+    )
   )
 }

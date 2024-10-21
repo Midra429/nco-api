@@ -43,7 +43,10 @@ export const video = async (
 }
 
 export const multipleVideo = (
-  contentIds: string[]
+  contentIds: string[],
+  credentials?: RequestInit['credentials']
 ): Promise<(VideoData | null)[]> => {
-  return Promise.all(contentIds.map((contentId) => video(contentId)))
+  return Promise.all(
+    contentIds.map((contentId) => video(contentId, credentials))
+  )
 }
