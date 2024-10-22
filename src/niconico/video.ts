@@ -23,6 +23,7 @@ export const video = async (
 
     try {
       const response = await fetch(url, {
+        mode: 'cors',
         credentials,
       })
       const json: VideoResponse = await response.json()
