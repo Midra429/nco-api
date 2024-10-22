@@ -1,11 +1,12 @@
 import type { SyoboCalChannelId } from '../types/constants.js'
+import type { SyoboCalProgramDb } from '../types/syobocal/db.js'
 
 import { ncoParser } from '@midra/nco-parser'
 import { similarity } from '@midra/nco-parser/utils/similarity'
 
 import { CHANNEL_IDS_JIKKYO_SYOBOCAL } from '../constants.js'
 
-import { json as syobocalJson } from '../syobocal/index.js'
+import * as syobocalApi from '../syobocal/index.js'
 
 const normalizeScTitle = (title: string) => {
   return title.replace(/\(第?[2-9](nd|rd|th)?クール\)$/g, '')
@@ -44,7 +45,7 @@ export const syobocal = async (
   )
 
   // 検索
-  const searchResponse = await syobocalJson(
+  const searchResponse = await syobocalApi.json(
     ['TitleSearch'],
     {
       Search: searchWord,
@@ -102,54 +103,58 @@ export const syobocal = async (
     return null
   }
 
-  // サブタイトルと放送情報を取得
-  const { SubTitles, Programs } =
-    (await syobocalJson(
-      ['SubTitles', 'ProgramByCount'],
-      {
-        TID: searchResultsAll.map((v) => v.TID),
-        Count: episodeNumber,
-        ChID: channelIds ?? CHANNEL_IDS_JIKKYO_SYOBOCAL.map((v) => v[1]),
-      },
-      { userAgent }
-    )) ?? {}
+  // 放送情報とサブタイトルを取得
+  const progLookupResponse = Object.values(
+    (await syobocalApi.db('ProgLookup', {
+      TID: searchResultsAll.map((v) => v.TID),
+      Count: episodeNumber,
+      ChID: channelIds ?? CHANNEL_IDS_JIKKYO_SYOBOCAL.map((v) => v[1]),
+      JOIN: 'SubTitles',
+    })) ?? {}
+  )
 
-  if (!Programs) {
+  if (!progLookupResponse.length) {
     return null
   }
 
   let tid: string | null = null
 
+  const programs: SyoboCalProgramDb[] = []
+
   if (searchResults.length === 1 && !searchResultsPartial.length) {
     tid = searchResults[0].TID
-  } else if (SubTitles) {
+
+    programs.push(...progLookupResponse.filter((prog) => prog.TID === tid))
+  } else {
     // サブタイトル比較
     if (subtitle) {
       const subtitleNormalized = ncoParser.normalizeAll(subtitle)
 
-      for (const val of Object.entries(SubTitles)) {
-        const scSubtitleNormalized = ncoParser.normalizeAll(
-          val[1][episodeNumber]
-        )
+      for (const prog of progLookupResponse) {
+        if (!prog.STSubTitle) continue
+
+        const scSubtitleNormalized = ncoParser.normalizeAll(prog.STSubTitle)
 
         if (
           0.85 <= similarity(subtitleNormalized, scSubtitleNormalized) ||
           subtitleNormalized.includes(scSubtitleNormalized) ||
           scSubtitleNormalized.includes(subtitleNormalized)
         ) {
-          tid = val[0]
+          tid ??= prog.TID
 
-          break
+          if (prog.TID === tid) {
+            programs.push(prog)
+          }
         }
       }
     }
 
-    if (!tid) {
+    if (!programs.length) {
       // 作品名比較
       for (const val of searchResults) {
-        if (!(val.TID in SubTitles)) {
-          continue
-        }
+        const progs = progLookupResponse.filter((prog) => prog.TID === val.TID)
+
+        if (!progs.length) continue
 
         const {
           normalized: scNormalized,
@@ -164,19 +169,21 @@ export const syobocal = async (
         ) {
           tid = val.TID
 
+          programs.push(...progs)
+
           break
         }
       }
     }
   }
 
-  if (!tid) {
+  if (!programs.length) {
     return null
   }
 
   return {
     title: searchResultsAll.find((v) => v.TID === tid)!,
-    subtitle: SubTitles?.[tid]?.[episodeNumber] ?? null,
-    programs: Object.values(Programs).filter((v) => v.TID === tid),
+    subtitle: programs[0]?.STSubTitle ?? null,
+    programs,
   }
 }

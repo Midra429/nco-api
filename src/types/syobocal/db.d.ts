@@ -36,6 +36,7 @@ type SyoboCalProgramDb = {
   Warn: string
   ChID: SyoboCalChannelId
   Revision: string
+  STSubTitle?: string
 }
 
 type SyoboCalProgItem = {
@@ -76,7 +77,7 @@ type SyoboCalDb = {
       Count?: number | number[]
       LastUpdate?: string
       Fields?: (keyof SyoboCalProgramDb)[]
-      JOIN?: string
+      JOIN?: 'SubTitles'
       PID?: string | string[]
     }
     response: {
