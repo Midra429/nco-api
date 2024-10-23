@@ -169,13 +169,13 @@ export const buildSearchQuery = (
       },
     })
 
-  // const subtitle =
-  //   input.subtitle &&
-  //   ncoParser.normalizeAll(input.subtitle, {
-  //     remove: {
-  //       space: false,
-  //     },
-  //   })
+  const subtitle =
+    input.subtitle &&
+    ncoParser.normalizeAll(input.subtitle, {
+      remove: {
+        space: false,
+      },
+    })
 
   const keywords: string[] = []
 
@@ -213,16 +213,30 @@ export const buildSearchQuery = (
       Number.isInteger(episodeNumber) && number2kanji(episodeNumber)
 
     const episodeKeywords = [
-      `${episodeNumber}話`,
-      episodeKansuji && `${episodeKansuji}話`,
-      `エピソード${episodeNumber}`,
-      `episode${episodeNumber}`,
-      `ep${episodeNumber}`,
-      `#${episodeNumber}`,
-      `#${zeroPadding(episodeNumber, 2)}`,
-      episodeText.includes(' ') ? `"${episodeText}"` : episodeText,
-      // subtitle && `"${subtitle}"`,
-    ]
+      // `${episodeNumber}話`,
+      // episodeKansuji && `${episodeKansuji}話`,
+      // `エピソード${episodeNumber}`,
+      // `episode${episodeNumber}`,
+      // `ep${episodeNumber}`,
+      // `#${episodeNumber}`,
+      // `#${zeroPadding(episodeNumber, 2)}`,
+      // episodeText.includes(' ') ? `"${episodeText}"` : episodeText,
+
+      title && !subtitle?.includes(title)
+        ? [
+            `${episodeNumber}話`,
+            episodeKansuji && `${episodeKansuji}話`,
+            `エピソード${episodeNumber}`,
+            `episode${episodeNumber}`,
+            `ep${episodeNumber}`,
+            `#${episodeNumber}`,
+            `#${zeroPadding(episodeNumber, 2)}`,
+            episodeText.includes(' ') ? `"${episodeText}"` : episodeText,
+
+            subtitle && `"${subtitle}"`,
+          ]
+        : [episodeNumber, episodeKansuji],
+    ].flat()
 
     keywords.push([...new Set(episodeKeywords)].filter(Boolean).join(' OR '))
   }
