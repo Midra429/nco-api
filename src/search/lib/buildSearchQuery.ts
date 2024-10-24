@@ -182,11 +182,9 @@ export const buildSearchQuery = (
   if (title) {
     const titles: string[] = [title]
 
-    // STEINS;GATE / シュタインズ・ゲート
+    // STEINS;GATE -> シュタインズ・ゲート
     if (ncoParser.compare(title, 'STEINS;GATE', true)) {
       titles.push('シュタインズ・ゲート')
-    } else if (ncoParser.compare(title, 'シュタインズ・ゲート', true)) {
-      titles.push('STEINS;GATE')
     }
 
     keywords.push(titles.join(' OR '))
