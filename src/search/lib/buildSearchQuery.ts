@@ -180,7 +180,16 @@ export const buildSearchQuery = (
   const keywords: string[] = []
 
   if (title) {
-    keywords.push(title)
+    const titles: string[] = [title]
+
+    // STEINS;GATE / シュタインズ・ゲート
+    if (ncoParser.compare(title, 'STEINS;GATE', true)) {
+      titles.push('シュタインズ・ゲート')
+    } else if (ncoParser.compare(title, 'シュタインズ・ゲート', true)) {
+      titles.push('STEINS;GATE')
+    }
+
+    keywords.push(titles.join(' OR '))
   }
 
   // if (seasonText != null && seasonNumber != null) {
