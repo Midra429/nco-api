@@ -1,6 +1,6 @@
 {
   "name": "@midra/nco-api",
-  "version": "1.8.13",
+  "version": "1.8.14",
   "description": "NCOverlay用のAPIライブラリ",
   "author": "Midra <me@midra.me> (https://github.com/Midra429)",
   "license": "MIT",
