@@ -7,6 +7,7 @@ import type {
   TVER_CHANNELS_BS,
   TVER_CHANNELS,
   SYOBOCAL_CHANNELS,
+  NHK_AREAS,
 } from '../constants.js'
 
 /**
@@ -48,3 +49,8 @@ export type TVerChannelId = keyof typeof TVER_CHANNELS
  * しょぼいカレンダーのチャンネルID
  */
 export type SyoboCalChannelId = keyof typeof SYOBOCAL_CHANNELS
+
+/**
+ * NHKのエリアID
+ */
+export type NhkAreaId = keyof typeof NHK_AREAS

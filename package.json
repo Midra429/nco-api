@@ -72,6 +72,11 @@
       "import": "./dist/nco/*.js",
       "default": "./dist/nco/*.js"
     },
+    "./nhkPlus/*": {
+      "types": "./dist/nhkPlus/*.d.ts",
+      "import": "./dist/nhkPlus/*.js",
+      "default": "./dist/nhkPlus/*.js"
+    },
     "./niconico/*": {
       "types": "./dist/niconico/*.d.ts",
       "import": "./dist/niconico/*.js",

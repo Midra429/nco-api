@@ -10,6 +10,7 @@ import * as dmmTv from './dmmTv/index.js'
 import * as fod from './fod/index.js'
 import * as unext from './unext/index.js'
 import * as tver from './tver/index.js'
+import * as nhkPlus from './nhkPlus/index.js'
 
 export const ncoApi = {
   nco,
@@ -24,4 +25,5 @@ export const ncoApi = {
   fod,
   unext,
   tver,
+  nhkPlus,
 }
