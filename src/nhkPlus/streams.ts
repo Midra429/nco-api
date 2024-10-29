@@ -15,7 +15,6 @@ export const streams = async (
   const url = new URL(streamId, API_BASE_URL)
 
   url.searchParams.set('area_id', areaId ?? '130')
-  url.searchParams.set('is_rounded', 'true')
 
   try {
     const response = await fetch(url)
