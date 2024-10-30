@@ -3,7 +3,7 @@ import type { NvComment } from '../types/niconico/video.js'
 
 import { logger } from '../utils/logger.js'
 
-type RequestBody = {
+export type ThreadsRequestBody = {
   params: NvComment['params']
   threadKey: NvComment['threadKey']
   additionals: {
@@ -18,12 +18,12 @@ const isResponseOk = (json: Threads): json is Required<Threads> => {
 
 export const threads = async (
   nvComment: NvComment | null,
-  additionals?: RequestBody['additionals']
+  additionals?: ThreadsRequestBody['additionals']
 ): Promise<ThreadsData | null> => {
   if (nvComment) {
     const url = new URL('/v1/threads', nvComment.server)
 
-    const body: RequestBody = {
+    const body: ThreadsRequestBody = {
       params: {
         ...nvComment.params,
         targets: nvComment.params.targets.filter(
@@ -64,7 +64,7 @@ export const threads = async (
 
 export const multipleThreads = (
   nvComments: (NvComment | null)[],
-  additionals?: RequestBody['additionals']
+  additionals?: ThreadsRequestBody['additionals']
 ): Promise<(ThreadsData | null)[]> => {
   return Promise.all(
     nvComments.map((nvComment) => threads(nvComment, additionals))
