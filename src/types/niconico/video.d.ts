@@ -178,7 +178,13 @@ export type Thread = {
   server: string
 }
 
-export type ThreadLabel = 'owner' | 'default' | 'community' | 'easy'
+export type ThreadLabel =
+  | 'owner'
+  | 'default'
+  | 'community'
+  | 'easy'
+  | 'extra-community'
+  | 'extra-easy'
 
 export type EasyComment = {
   phrases: Phrase[]
