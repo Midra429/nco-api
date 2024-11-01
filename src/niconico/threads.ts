@@ -24,12 +24,7 @@ export const threads = async (
     const url = new URL('/v1/threads', nvComment.server)
 
     const body: ThreadsRequestBody = {
-      params: {
-        ...nvComment.params,
-        targets: nvComment.params.targets.filter(
-          (v) => !v.fork.includes('easy')
-        ),
-      },
+      params: nvComment.params,
       threadKey: nvComment.threadKey,
       additionals: additionals ?? {},
     }
