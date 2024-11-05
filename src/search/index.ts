@@ -174,13 +174,16 @@ export const search = async (args: BuildSearchQueryArgs) => {
     data,
   })
 
+  const isOfficialEmpty = !!options.official && !sorted1.official.length
+  const isDAnimeEmpty = !!options.danime && !sorted1.danime.length
+
   // 2回目 (公式, dアニメ)
-  if (options.official && !sorted1.official.length && !sorted1.danime.length) {
+  if (isOfficialEmpty || isDAnimeEmpty) {
     const searchQuery2 = buildSearchQuery({
       ...args,
       options: {
-        official: true,
-        danime: true,
+        official: isOfficialEmpty,
+        danime: isDAnimeEmpty,
         userAgent: args.options.userAgent,
       },
     })
@@ -189,7 +192,7 @@ export const search = async (args: BuildSearchQueryArgs) => {
       [
         input.title,
         input.seasonNumber && 1 < input.seasonNumber && input.seasonText,
-        input.episodeText,
+        input.episodeNumber,
         input.subtitle,
       ]
         .filter(Boolean)
