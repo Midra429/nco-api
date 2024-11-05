@@ -12,6 +12,8 @@ import { DANIME_CHANNEL_ID, REGEXP_DANIME_CHAPTER } from '../constants.js'
 import { search as niconicoSearch } from '../niconico/index.js'
 import { buildSearchQuery } from './lib/buildSearchQuery.js'
 
+const MAX_MATCH_LENGTH = 3
+
 const fields = [
   'contentId',
   'title',
@@ -145,6 +147,20 @@ const sortingSearchData = ({
 
   if (!validateChapters(contents.chapter)) {
     contents.chapter = []
+  }
+
+  // 最大一致数より多い場合、無効に
+  if (MAX_MATCH_LENGTH < contents.official.length) {
+    contents.official = []
+  }
+  if (MAX_MATCH_LENGTH < contents.danime.length) {
+    contents.danime = []
+  }
+  if (MAX_MATCH_LENGTH < contents.chapter.length) {
+    contents.chapter = []
+  }
+  if (MAX_MATCH_LENGTH < contents.szbh.length) {
+    contents.szbh = []
   }
 
   return contents
