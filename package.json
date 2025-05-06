@@ -72,6 +72,11 @@
       "import": "./dist/nco/*.js",
       "default": "./dist/nco/*.js"
     },
+    "./netflix/*": {
+      "types": "./dist/netflix/*.d.ts",
+      "import": "./dist/netflix/*.js",
+      "default": "./dist/netflix/*.js"
+    },
     "./nhkPlus/*": {
       "types": "./dist/nhkPlus/*.d.ts",
       "import": "./dist/nhkPlus/*.js",
@@ -118,13 +123,13 @@
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
-    "@xpadev-net/niconicomments": "^0.2.72",
+    "@xpadev-net/niconicomments": "^0.2.73",
     "cpx": "^1.5.0",
-    "glob": "^11.0.0",
+    "glob": "^11.0.2",
     "jest": "^29.7.0",
     "rimraf": "^6.0.1",
-    "ts-jest": "^29.2.5",
-    "typescript": "^5.6.3",
+    "ts-jest": "^29.3.2",
+    "typescript": "^5.8.3",
     "utility-types": "^3.11.0"
   }
 }

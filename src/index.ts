@@ -11,6 +11,7 @@ import * as fod from './fod/index.js'
 import * as unext from './unext/index.js'
 import * as tver from './tver/index.js'
 import * as nhkPlus from './nhkPlus/index.js'
+import * as netflix from './netflix/index.js'
 
 export const ncoApi = {
   nco,
@@ -26,4 +27,5 @@ export const ncoApi = {
   unext,
   tver,
   nhkPlus,
+  netflix,
 }
