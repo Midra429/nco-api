@@ -22,14 +22,26 @@ export type Video = {
   id: number
   userRating: UserRating
   skipMarkers: SkipMarkers
-  currentEpisode: number
+  currentEpisode?: number
   hiddenEpisodeNumbers: boolean
   requiresAdultVerification: boolean
   requiresPin: boolean
   requiresPreReleasePin: boolean
-  seasons: Season[]
+  seasons?: Season[]
   merchedVideoId: null
   cinematch: Cinematch
+  start?: number
+  end?: number
+  year?: number
+  creditsOffset?: number
+  runtime?: number
+  displayRuntime?: number
+  autoplayable?: boolean
+  liveEvent?: LiveEvent
+  taglineMessages?: TaglineMessages
+  bookmark?: Bookmark
+  hd?: boolean
+  stills?: Artwork[]
 }
 
 export type Artwork = {
@@ -38,9 +50,18 @@ export type Artwork = {
   url: string
 }
 
+export type Bookmark = {
+  watchedDate: number
+  offset: number
+}
+
 export type Cinematch = {
   type: string
   value: string
+}
+
+export type LiveEvent = {
+  hasLiveEvent: boolean
 }
 
 export type MatchScore = {
@@ -92,15 +113,6 @@ export type Episode = {
   hiddenEpisodeNumbers: boolean
 }
 
-export type Bookmark = {
-  watchedDate: number
-  offset: number
-}
-
-export type LiveEvent = {
-  hasLiveEvent: boolean
-}
-
 export type SkipMarkers = {
   credit: Credit
   recap: Credit
@@ -113,8 +125,10 @@ export type Credit = {
 
 export type TaglineMessages = {
   tagline: string
-  classification: 'REGULAR'
+  classification: Classification
 }
+
+export type Classification = 'REGULAR' | 'MOST_LIKED'
 
 export type UserRating = {
   type: string
